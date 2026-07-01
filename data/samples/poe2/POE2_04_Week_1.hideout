@@ -1,0 +1,1422 @@
+﻿{
+  "version": 1,
+  "language": "English",
+  "hideout_name": "The Dreadnought Hideout",
+  "hideout_hash": 30315,
+  "doodads": {
+    "Clam Stash": {
+      "hash": 872064787,
+      "x": 980,
+      "y": 540,
+      "r": 48745,
+      "fv": 0
+    },
+    "Clam Guild Stash": {
+      "hash": 4084010789,
+      "x": 983,
+      "y": 526,
+      "r": 49878,
+      "fv": 0
+    },
+    "Stormcaller Tinker's Waypoint": {
+      "hash": 2540954578,
+      "x": 974,
+      "y": 522,
+      "r": 0,
+      "fv": 0
+    },
+    "Gold Timekeeper's Map Device": {
+      "hash": 2784244169,
+      "x": 924,
+      "y": 545,
+      "r": 31319,
+      "fv": 0
+    },
+    "Relic Locker": {
+      "hash": 12969733,
+      "x": 983,
+      "y": 511,
+      "r": 49376,
+      "fv": 0
+    },
+    "Reforging Bench": {
+      "hash": 3263423625,
+      "x": 983,
+      "y": 550,
+      "r": 0,
+      "fv": 0
+    },
+    "Ancestral Canoe Crafting Bench": {
+      "hash": 1592459160,
+      "x": 974,
+      "y": 566,
+      "r": 0,
+      "fv": 0
+    },
+    "Well": {
+      "hash": 2057229261,
+      "x": 959,
+      "y": 520,
+      "r": 0,
+      "fv": 1
+    },
+    "Recombinator": {
+      "hash": 4243958141,
+      "x": 970,
+      "y": 480,
+      "r": 33525,
+      "fv": 0
+    },
+    "Wardrobe Decoration": {
+      "hash": 2914603195,
+      "x": 658,
+      "y": 608,
+      "r": 0,
+      "fv": 0
+    },
+    "Ange": {
+      "hash": 2297799330,
+      "x": 991,
+      "y": 532,
+      "r": 32149,
+      "fv": 0
+    },
+    "Alva": {
+      "hash": 2115859440,
+      "x": 993,
+      "y": 525,
+      "r": 51432,
+      "fv": 0
+    },
+    "Zelina": {
+      "hash": 1023253651,
+      "x": 982,
+      "y": 558,
+      "r": 59524,
+      "fv": 0
+    },
+    "Zolin": {
+      "hash": 2204408127,
+      "x": 987,
+      "y": 551,
+      "r": 49625,
+      "fv": 0
+    },
+    "Doryani": {
+      "hash": 3673653565,
+      "x": 989,
+      "y": 541,
+      "r": 61361,
+      "fv": 0
+    },
+    "Rog": {
+      "hash": 408811958,
+      "x": 994,
+      "y": 499,
+      "r": 42565,
+      "fv": 0
+    },
+    "Tujen": {
+      "hash": 1188734792,
+      "x": 957,
+      "y": 493,
+      "r": 43018,
+      "fv": 0
+    },
+    "Dannig": {
+      "hash": 2939302567,
+      "x": 958,
+      "y": 503,
+      "r": 44119,
+      "fv": 0
+    },
+    "Gwennen": {
+      "hash": 2230709308,
+      "x": 995,
+      "y": 512,
+      "r": 26026,
+      "fv": 0
+    },
+    "Chaotic Peddler's Rain Hideout Decoration": {
+      "hash": 4252646805,
+      "x": 974,
+      "y": 525,
+      "r": 0,
+      "fv": 1
+    },
+    "Commemorative Malachai Statue Hideout Decoration": {
+      "hash": 2525701763,
+      "x": 963,
+      "y": 465,
+      "r": 33015,
+      "fv": 0
+    },
+    "Commemorative Dominus Statue Hideout Decoration": {
+      "hash": 99228286,
+      "x": 990,
+      "y": 466,
+      "r": 33017,
+      "fv": 0
+    },
+    "Commemorative Vaal Oversoul Statue Hideout Decoration": {
+      "hash": 1072124116,
+      "x": 1019,
+      "y": 481,
+      "r": 48919,
+      "fv": 0
+    },
+    "Baby Crowbell Pet": {
+      "hash": 583221441,
+      "x": 932,
+      "y": 541,
+      "r": 54420,
+      "fv": 0
+    },
+    "Commemorative Hillock Statue Hideout Decoration": {
+      "hash": 437057711,
+      "x": 1018,
+      "y": 498,
+      "r": 49401,
+      "fv": 0
+    },
+    "Exalted Peddler's Rain Hideout Decoration": {
+      "hash": 1175625017,
+      "x": 974,
+      "y": 522,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 979,
+      "y": 805,
+      "r": 0,
+      "fv": 2
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 877,
+      "y": 799,
+      "r": 60418,
+      "fv": 1
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 680,
+      "y": 374,
+      "r": 2560,
+      "fv": 9
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 830,
+      "y": 356,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 869,
+      "y": 747,
+      "r": 1130,
+      "fv": 0
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 850,
+      "y": 741,
+      "r": 60390,
+      "fv": 2
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 881,
+      "y": 294,
+      "r": 16813,
+      "fv": 3
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 824,
+      "y": 748,
+      "r": 34317,
+      "fv": 9
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 621,
+      "y": 741,
+      "r": 38384,
+      "fv": 0
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 637,
+      "y": 811,
+      "r": 49205,
+      "fv": 4
+    },
+    "Faridun Burner": {
+      "hash": 84313841,
+      "x": 850,
+      "y": 540,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 883,
+      "y": 329,
+      "r": 14670,
+      "fv": 6
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 859,
+      "y": 308,
+      "r": 0,
+      "fv": 13
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 728,
+      "y": 284,
+      "r": 32932,
+      "fv": 3
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 582,
+      "y": 541,
+      "r": 49147,
+      "fv": 1
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 755,
+      "y": 805,
+      "r": 45159,
+      "fv": 6
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 725,
+      "y": 750,
+      "r": 52940,
+      "fv": 7
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 839,
+      "y": 356,
+      "r": 0,
+      "fv": 20
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 710,
+      "y": 468,
+      "r": 35450,
+      "fv": 6
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 759,
+      "y": 360,
+      "r": 31550,
+      "fv": 5
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 616,
+      "y": 340,
+      "r": 61180,
+      "fv": 0
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 660,
+      "y": 377,
+      "r": 65027,
+      "fv": 10
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 667,
+      "y": 335,
+      "r": 0,
+      "fv": 2
+    },
+    "Faridun Throne": {
+      "hash": 3368507950,
+      "x": 1006,
+      "y": 538,
+      "r": 48260,
+      "fv": 0
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 690,
+      "y": 336,
+      "r": 32416,
+      "fv": 10
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 674,
+      "y": 812,
+      "r": 63918,
+      "fv": 19
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 723,
+      "y": 488,
+      "r": 50055,
+      "fv": 8
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 668,
+      "y": 732,
+      "r": 14770,
+      "fv": 11
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 611,
+      "y": 725,
+      "r": 16385,
+      "fv": 4
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 622,
+      "y": 765,
+      "r": 43613,
+      "fv": 12
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 670,
+      "y": 369,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 677,
+      "y": 338,
+      "r": 12283,
+      "fv": 8
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 788,
+      "y": 302,
+      "r": 6004,
+      "fv": 8
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 768,
+      "y": 470,
+      "r": 12220,
+      "fv": 0
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 728,
+      "y": 287,
+      "r": 20235,
+      "fv": 19
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 534,
+      "y": 609,
+      "r": 0,
+      "fv": 6
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 584,
+      "y": 562,
+      "r": 65028,
+      "fv": 6
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 635,
+      "y": 804,
+      "r": 14696,
+      "fv": 10
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 663,
+      "y": 805,
+      "r": 57965,
+      "fv": 3
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 766,
+      "y": 594,
+      "r": 16736,
+      "fv": 4
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 768,
+      "y": 502,
+      "r": 15796,
+      "fv": 3
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 768,
+      "y": 565,
+      "r": 14867,
+      "fv": 2
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 810,
+      "y": 614,
+      "r": 32768,
+      "fv": 4
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 761,
+      "y": 561,
+      "r": 0,
+      "fv": 5
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 541,
+      "y": 611,
+      "r": 58587,
+      "fv": 8
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 533,
+      "y": 604,
+      "r": 5215,
+      "fv": 2
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 767,
+      "y": 802,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 753,
+      "y": 816,
+      "r": 0,
+      "fv": 9
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 770,
+      "y": 813,
+      "r": 0,
+      "fv": 12
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 786,
+      "y": 752,
+      "r": 1314,
+      "fv": 1
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 729,
+      "y": 540,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 658,
+      "y": 745,
+      "r": 21392,
+      "fv": 2
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 697,
+      "y": 507,
+      "r": 21753,
+      "fv": 3
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 610,
+      "y": 768,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 676,
+      "y": 724,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 740,
+      "y": 811,
+      "r": 52451,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 667,
+      "y": 333,
+      "r": 7396,
+      "fv": 0
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 733,
+      "y": 610,
+      "r": 318,
+      "fv": 17
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 712,
+      "y": 605,
+      "r": 14357,
+      "fv": 12
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 754,
+      "y": 571,
+      "r": 25660,
+      "fv": 6
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 750,
+      "y": 473,
+      "r": 17213,
+      "fv": 3
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 744,
+      "y": 487,
+      "r": 1585,
+      "fv": 9
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 727,
+      "y": 473,
+      "r": 54218,
+      "fv": 16
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 715,
+      "y": 478,
+      "r": 47733,
+      "fv": 7
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 727,
+      "y": 602,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 719,
+      "y": 599,
+      "r": 63155,
+      "fv": 5
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 791,
+      "y": 502,
+      "r": 16387,
+      "fv": 7
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 791,
+      "y": 576,
+      "r": 16385,
+      "fv": 133
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 860,
+      "y": 558,
+      "r": 58505,
+      "fv": 9
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 492,
+      "y": 489,
+      "r": 0,
+      "fv": 12
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 834,
+      "y": 518,
+      "r": 23898,
+      "fv": 1
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 697,
+      "y": 573,
+      "r": 10621,
+      "fv": 3
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 492,
+      "y": 517,
+      "r": 0,
+      "fv": 11
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 492,
+      "y": 561,
+      "r": 0,
+      "fv": 11
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 492,
+      "y": 603,
+      "r": 0,
+      "fv": 12
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 1013,
+      "y": 613,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 675,
+      "y": 472,
+      "r": 1863,
+      "fv": 1
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 676,
+      "y": 607,
+      "r": 33966,
+      "fv": 0
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 1012,
+      "y": 515,
+      "r": 49799,
+      "fv": 2
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 1012,
+      "y": 568,
+      "r": 48745,
+      "fv": 2
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 940,
+      "y": 555,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 940,
+      "y": 524,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 1003,
+      "y": 538,
+      "r": 0,
+      "fv": 3
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 959,
+      "y": 754,
+      "r": 42787,
+      "fv": 5
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 840,
+      "y": 605,
+      "r": 35670,
+      "fv": 1
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 810,
+      "y": 465,
+      "r": 0,
+      "fv": 132
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 754,
+      "y": 600,
+      "r": 26920,
+      "fv": 16
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 859,
+      "y": 610,
+      "r": 28673,
+      "fv": 2
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 869,
+      "y": 531,
+      "r": 11749,
+      "fv": 11
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 845,
+      "y": 563,
+      "r": 62833,
+      "fv": 130
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 518,
+      "y": 540,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 819,
+      "y": 481,
+      "r": 52911,
+      "fv": 2
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 810,
+      "y": 611,
+      "r": 64557,
+      "fv": 4
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 860,
+      "y": 467,
+      "r": 3962,
+      "fv": 2
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 838,
+      "y": 472,
+      "r": 60050,
+      "fv": 0
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 695,
+      "y": 470,
+      "r": 10083,
+      "fv": 1
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 869,
+      "y": 552,
+      "r": 50641,
+      "fv": 19
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 879,
+      "y": 547,
+      "r": 38232,
+      "fv": 21
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 936,
+      "y": 573,
+      "r": 11631,
+      "fv": 8
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 515,
+      "y": 607,
+      "r": 50396,
+      "fv": 6
+    },
+    "Faridun Tools": {
+      "hash": 2233574719,
+      "x": 856,
+      "y": 520,
+      "r": 4615,
+      "fv": 10
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 651,
+      "y": 468,
+      "r": 64344,
+      "fv": 9
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 704,
+      "y": 518,
+      "r": 21071,
+      "fv": 4
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 615,
+      "y": 613,
+      "r": 62906,
+      "fv": 8
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 668,
+      "y": 336,
+      "r": 56262,
+      "fv": 0
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 695,
+      "y": 609,
+      "r": 25255,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 646,
+      "y": 615,
+      "r": 36864,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 647,
+      "y": 466,
+      "r": 26629,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 739,
+      "y": 598,
+      "r": 13927,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 763,
+      "y": 517,
+      "r": 50122,
+      "fv": 4
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 765,
+      "y": 506,
+      "r": 15651,
+      "fv": 0
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 822,
+      "y": 595,
+      "r": 49253,
+      "fv": 4
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 829,
+      "y": 478,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 927,
+      "y": 780,
+      "r": 0,
+      "fv": 5
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 985,
+      "y": 821,
+      "r": 32870,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 985,
+      "y": 742,
+      "r": 29757,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 846,
+      "y": 808,
+      "r": 32519,
+      "fv": 3
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 535,
+      "y": 605,
+      "r": 0,
+      "fv": 5
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 506,
+      "y": 613,
+      "r": 57326,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 669,
+      "y": 336,
+      "r": 0,
+      "fv": 5
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 701,
+      "y": 366,
+      "r": 0,
+      "fv": 3
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 741,
+      "y": 284,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 874,
+      "y": 281,
+      "r": 22916,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 823,
+      "y": 298,
+      "r": 3671,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 634,
+      "y": 813,
+      "r": 62989,
+      "fv": 3
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 613,
+      "y": 757,
+      "r": 58823,
+      "fv": 3
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 610,
+      "y": 746,
+      "r": 9511,
+      "fv": 4
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 675,
+      "y": 747,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 769,
+      "y": 749,
+      "r": 63995,
+      "fv": 3
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 731,
+      "y": 812,
+      "r": 0,
+      "fv": 4
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 788,
+      "y": 808,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 748,
+      "y": 750,
+      "r": 1715,
+      "fv": 1
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 905,
+      "y": 815,
+      "r": 30850,
+      "fv": 0
+    },
+    "Faridun Cages": {
+      "hash": 4201908741,
+      "x": 732,
+      "y": 750,
+      "r": 0,
+      "fv": 2
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 1017,
+      "y": 466,
+      "r": 49779,
+      "fv": 8
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 866,
+      "y": 816,
+      "r": 0,
+      "fv": 7
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 1016,
+      "y": 567,
+      "r": 49352,
+      "fv": 4
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 889,
+      "y": 822,
+      "r": 34519,
+      "fv": 2
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 1017,
+      "y": 515,
+      "r": 49395,
+      "fv": 5
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 1014,
+      "y": 614,
+      "r": 48688,
+      "fv": 8
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 944,
+      "y": 565,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 1008,
+      "y": 537,
+      "r": 16439,
+      "fv": 9
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 1013,
+      "y": 514,
+      "r": 48943,
+      "fv": 7
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 1013,
+      "y": 566,
+      "r": 49197,
+      "fv": 7
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 922,
+      "y": 576,
+      "r": 64584,
+      "fv": 0
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 805,
+      "y": 299,
+      "r": 0,
+      "fv": 3
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 918,
+      "y": 565,
+      "r": 44945,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 946,
+      "y": 518,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 919,
+      "y": 517,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 998,
+      "y": 547,
+      "r": 35027,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 999,
+      "y": 527,
+      "r": 31052,
+      "fv": 6
+    },
+    "Faridun Lights": {
+      "hash": 3954940097,
+      "x": 834,
+      "y": 359,
+      "r": 63204,
+      "fv": 4
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 1017,
+      "y": 466,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Gazebo": {
+      "hash": 840948425,
+      "x": 927,
+      "y": 780,
+      "r": 49033,
+      "fv": 3
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 832,
+      "y": 356,
+      "r": 48682,
+      "fv": 6
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 845,
+      "y": 303,
+      "r": 1769,
+      "fv": 8
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 813,
+      "y": 353,
+      "r": 59281,
+      "fv": 11
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 654,
+      "y": 805,
+      "r": 0,
+      "fv": 1
+    },
+    "Faridun Cloth": {
+      "hash": 3972091508,
+      "x": 663,
+      "y": 371,
+      "r": 35983,
+      "fv": 2
+    },
+    "Faridun Chains": {
+      "hash": 3148939699,
+      "x": 968,
+      "y": 769,
+      "r": 0,
+      "fv": 0
+    },
+    "Faridun Ropes": {
+      "hash": 1675705915,
+      "x": 841,
+      "y": 756,
+      "r": 0,
+      "fv": 6
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 600,
+      "y": 615,
+      "r": 64627,
+      "fv": 5
+    },
+    "Faridun Weapons": {
+      "hash": 2061030970,
+      "x": 717,
+      "y": 476,
+      "r": 49737,
+      "fv": 8
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 922,
+      "y": 821,
+      "r": 26574,
+      "fv": 2
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 840,
+      "y": 821,
+      "r": 20992,
+      "fv": 1
+    },
+    "Faridun Ballista": {
+      "hash": 920858563,
+      "x": 823,
+      "y": 818,
+      "r": 36052,
+      "fv": 1
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 996,
+      "y": 757,
+      "r": 16565,
+      "fv": 3
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 940,
+      "y": 778,
+      "r": 17581,
+      "fv": 21
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 980,
+      "y": 749,
+      "r": 10040,
+      "fv": 1
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 997,
+      "y": 786,
+      "r": 17301,
+      "fv": 2
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 997,
+      "y": 813,
+      "r": 16667,
+      "fv": 3
+    },
+    "Faridun Barricade": {
+      "hash": 1242587291,
+      "x": 886,
+      "y": 743,
+      "r": 4053,
+      "fv": 2
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 977,
+      "y": 771,
+      "r": 14822,
+      "fv": 3
+    },
+    "Faridun Cargo": {
+      "hash": 3225797304,
+      "x": 965,
+      "y": 746,
+      "r": 9476,
+      "fv": 14
+    },
+    "Trialmaster Hideout Decoration": {
+      "hash": 1398651980,
+      "x": 923,
+      "y": 509,
+      "r": 65008,
+      "fv": 0
+    },
+    "Maraketh Rhoa": {
+      "hash": 187118194,
+      "x": 947,
+      "y": 500,
+      "r": 0,
+      "fv": 0
+    }
+  }
+}

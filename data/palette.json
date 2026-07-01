@@ -1,0 +1,28 @@
+{
+  "note": "Mosaic palette. `hash`/`name` are REAL, harvested from actual PoE2 .hideout files (name<->hash is a verified global 1:1 mapping, so these hashes are portable). `hex` is the intended top-down color: entries marked color:measured were sampled from a decoration render; color:est are inferred from the decoration's theme and still need in-game verification. Ink mode auto-selects the darkest entry (Black Incense Burner).",
+  "provisional_colors": true,
+  "colors": [
+    { "name": "Black Incense Burner",      "hash": 1098125754, "hex": "#2a2a2a", "role": "black/ink", "color": "est" },
+    { "name": "Faridun Ropes",             "hash": 1675705915, "hex": "#3a3733", "role": "dark brown", "color": "measured" },
+    { "name": "Twilight Carpet",           "hash": 2060445277, "hex": "#4a3f6b", "role": "purple (flat carpet)", "color": "est" },
+    { "name": "Rhoa Race Banner (Purple)", "hash": 3184408734, "hex": "#6f3fa0", "role": "purple", "color": "est" },
+    { "name": "Twilight Plant",            "hash": 3597157905, "hex": "#5a3f7a", "role": "purple foliage", "color": "est" },
+    { "name": "Rhoa Race Banner (Blue)",   "hash": 2254824640, "hex": "#3255a8", "role": "blue", "color": "est" },
+    { "name": "Rhoa Race Banner (Cyan)",   "hash": 394161879,  "hex": "#3aacac", "role": "cyan", "color": "est" },
+    { "name": "Rhoa Race Banner (Green)",  "hash": 1404259477, "hex": "#3f8f3f", "role": "green", "color": "est" },
+    { "name": "Forest Fern",               "hash": 145306441,  "hex": "#46612b", "role": "green ground (mass-placeable)", "color": "est" },
+    { "name": "Shoreline Fern",            "hash": 2984478824, "hex": "#4a6b34", "role": "green ground", "color": "est" },
+    { "name": "Fringe Moss",               "hash": 1459723677, "hex": "#414226", "role": "dark olive ground", "color": "measured" },
+    { "name": "Vaal Potted Plants",        "hash": 733910357,  "hex": "#3a5a2a", "role": "dark green foliage", "color": "est" },
+    { "name": "Rhoa Race Banner (Yellow)", "hash": 1128037565, "hex": "#d4bb3a", "role": "yellow", "color": "est" },
+    { "name": "Faridun Lights",            "hash": 3954940097, "hex": "#e6b84f", "role": "warm yellow accent", "color": "est" },
+    { "name": "Sand Tussock",              "hash": 146816198,  "hex": "#b6a35a", "role": "straw/sandy", "color": "est" },
+    { "name": "Faridun Burner",            "hash": 84313841,   "hex": "#d8802a", "role": "orange", "color": "est" },
+    { "name": "Maraketh Fire Pot",         "hash": 57228444,   "hex": "#d86a2a", "role": "orange flame", "color": "est" },
+    { "name": "Faridun Cloth",             "hash": 3972091508, "hex": "#9a5a3f", "role": "warm tan/skin-ish", "color": "est" },
+    { "name": "Rhoa Race Banner (Red)",    "hash": 430252397,  "hex": "#a83232", "role": "red", "color": "est" },
+    { "name": "Shoreline Pebbles",         "hash": 2365064644, "hex": "#6a5b47", "role": "brown-grey ground", "color": "measured" },
+    { "name": "Large Shore Rock",          "hash": 877728377,  "hex": "#7d7468", "role": "grey stone", "color": "est" },
+    { "name": "Faridun Tools",             "hash": 2233574719, "hex": "#969981", "role": "neutral grey", "color": "measured" }
+  ]
+}

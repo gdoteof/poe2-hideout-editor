@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">
+  <!-- Flat cartoon "dickbutt": peach body, bold black outline, transparent bg.
+       Built as an outline layer (black, fat stroke) under a fill layer (peach,
+       no stroke) so overlapping body parts merge cleanly with a single outline.
+       Designed for high-contrast color mosaicking. -->
+  <defs>
+    <g id="body">
+      <rect x="64" y="48" width="98" height="48" rx="24"/>       <!-- shaft -->
+      <circle cx="66" cy="72" r="30"/>                            <!-- head/glans -->
+      <circle cx="184" cy="58" r="30"/>                           <!-- top cheek -->
+      <circle cx="184" cy="100" r="30"/>                          <!-- bottom cheek -->
+      <rect x="96" y="86" width="18" height="36" rx="9"/>         <!-- leg -->
+      <rect x="134" y="86" width="18" height="36" rx="9"/>        <!-- leg -->
+    </g>
+  </defs>
+
+  <!-- outline -->
+  <use href="#body" fill="#141414" stroke="#141414" stroke-width="14" stroke-linejoin="round"/>
+  <!-- fill -->
+  <use href="#body" fill="#f2c79e"/>
+
+  <!-- butt cleft crease -->
+  <path d="M204 64 Q193 80 204 96" fill="none" stroke="#141414" stroke-width="6" stroke-linecap="round"/>
+  <!-- eyes -->
+  <circle cx="56" cy="63" r="4.5" fill="#141414"/>
+  <circle cx="56" cy="83" r="4.5" fill="#141414"/>
+</svg>

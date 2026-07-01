@@ -1,0 +1,183 @@
+﻿{
+  "version": 1,
+  "language": "English",
+  "hideout_name": "Vastiri Plains Hideout",
+  "hideout_hash": 2292,
+  "doodads": {
+    "Atziri's Royal Cache Stash": {
+      "hash": 3361703871,
+      "x": 466,
+      "y": 449,
+      "r": 2712,
+      "fv": 0
+    },
+    "Atziri's Royal Cache Guild Stash": {
+      "hash": 3521457160,
+      "x": 424,
+      "y": 409,
+      "r": 35556,
+      "fv": 0
+    },
+    "Stormcaller Tinker's Waypoint": {
+      "hash": 2540954578,
+      "x": 445,
+      "y": 429,
+      "r": 0,
+      "fv": 0
+    },
+    "Gold Timekeeper's Map Device": {
+      "hash": 2784244169,
+      "x": 414,
+      "y": 457,
+      "r": 26609,
+      "fv": 0
+    },
+    "Relic Locker": {
+      "hash": 12969733,
+      "x": 446,
+      "y": 445,
+      "r": 62506,
+      "fv": 0
+    },
+    "Reforging Bench": {
+      "hash": 3263423625,
+      "x": 469,
+      "y": 430,
+      "r": 0,
+      "fv": 0
+    },
+    "Ancestral Canoe Crafting Bench": {
+      "hash": 1592459160,
+      "x": 481,
+      "y": 428,
+      "r": 48583,
+      "fv": 0
+    },
+    "Well": {
+      "hash": 2057229261,
+      "x": 448,
+      "y": 453,
+      "r": 62955,
+      "fv": 2
+    },
+    "Recombinator": {
+      "hash": 4243958141,
+      "x": 462,
+      "y": 408,
+      "r": 41096,
+      "fv": 0
+    },
+    "Wardrobe Decoration": {
+      "hash": 2914603195,
+      "x": 464,
+      "y": 392,
+      "r": 57026,
+      "fv": 0
+    },
+    "Alva": {
+      "hash": 2115859440,
+      "x": 453,
+      "y": 398,
+      "r": 36818,
+      "fv": 0
+    },
+    "Zelina": {
+      "hash": 1023253651,
+      "x": 437,
+      "y": 395,
+      "r": 30212,
+      "fv": 0
+    },
+    "Zolin": {
+      "hash": 2204408127,
+      "x": 439,
+      "y": 408,
+      "r": 29554,
+      "fv": 0
+    },
+    "Doryani": {
+      "hash": 3673653565,
+      "x": 449,
+      "y": 407,
+      "r": 36882,
+      "fv": 0
+    },
+    "Rog": {
+      "hash": 408811958,
+      "x": 424,
+      "y": 433,
+      "r": 62431,
+      "fv": 0
+    },
+    "Tujen": {
+      "hash": 1188734792,
+      "x": 418,
+      "y": 420,
+      "r": 65535,
+      "fv": 0
+    },
+    "Dannig": {
+      "hash": 2939302567,
+      "x": 425,
+      "y": 422,
+      "r": 62496,
+      "fv": 0
+    },
+    "Gwennen": {
+      "hash": 2230709308,
+      "x": 413,
+      "y": 429,
+      "r": 2058,
+      "fv": 0
+    },
+    "Ange": {
+      "hash": 2297799330,
+      "x": 331,
+      "y": 376,
+      "r": 2903,
+      "fv": 0
+    },
+    "Backalley Trader": {
+      "hash": 2208874294,
+      "x": 473,
+      "y": 401,
+      "r": 41243,
+      "fv": 0
+    },
+    "Goblin Troupe Pet": {
+      "hash": 451410376,
+      "x": 571,
+      "y": 251,
+      "r": 3604,
+      "fv": 0
+    },
+    "Item Display Case": {
+      "hash": 2005575331,
+      "x": 444,
+      "y": 387,
+      "r": 8391,
+      "fv": 0
+    },
+    "Item Display Case": {
+      "hash": 2005575331,
+      "x": 453,
+      "y": 379,
+      "r": 7987,
+      "fv": 0
+    },
+    "Exalted Peddler's Rain Hideout Decoration": {
+      "hash": 1175625017,
+      "x": 446,
+      "y": 430,
+      "r": 0,
+      "fv": 1
+    },
+    "Trialmaster Hideout Decoration": {
+      "hash": 1398651980,
+      "x": 479,
+      "y": 461,
+      "r": 57364,
+      "fv": 0
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  // Cloudflare Pages project for the hideout editor.
+  // Deploy with: npm run deploy  (builds dist/ then uploads)
+  "name": "buttstuff",
+  "pages_build_output_dir": "dist"
+}
