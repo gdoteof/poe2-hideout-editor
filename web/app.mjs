@@ -60,14 +60,18 @@ function resize() {
   cv.height = Math.floor(r.height);
   draw();
 }
+// Square side (world units) for "cells" view when the model has no known grid
+// step (i.e. an imported hideout rather than a generated mosaic).
+const IMPORT_CELL = 6;
 function draw() {
   // neutral "floor" so decorations of any color read against it
   ctx.fillStyle = "#9aa0a8";
   ctx.fillRect(0, 0, cv.width, cv.height);
   if (!model) return;
-  const cell = model._cell; // grid step (mosaics) -> draw connected squares
-  if (cell) {
-    const s = Math.max(1, cell * view.scale);
+  const style = $("view-style").value; // "cells" | "dots" — applies to any source
+  const cellW = model._cell ?? IMPORT_CELL;
+  if (style === "cells") {
+    const s = Math.max(1, cellW * view.scale);
     for (const d of model.doodads) {
       const [sx, sy] = worldToScreen(d.x, d.y);
       if (sx < -s || sy < -s || sx > cv.width + s || sy > cv.height + s) continue;
@@ -89,7 +93,7 @@ function draw() {
   if (selected != null && model.doodads[selected]) {
     const d = model.doodads[selected];
     const [sx, sy] = worldToScreen(d.x, d.y);
-    const r = Math.max(9, (cell ? cell * view.scale : 8));
+    const r = Math.max(9, (style === "cells" ? cellW * view.scale : 8));
     ctx.lineWidth = 3; ctx.strokeStyle = "#000";
     ctx.strokeRect(sx - r / 2, sy - r / 2, r, r);
     ctx.lineWidth = 1.5; ctx.strokeStyle = "#fff";
@@ -328,6 +332,7 @@ $("file").addEventListener("change", async (e) => {
   // reflect the loaded file's base in the picker (best-effort match by hash)
   const opt = [...$("base-pick").options].find((o) => +o.dataset.hash === model.hideout_hash);
   if (opt) $("base-pick").value = opt.value;
+  $("view-style").value = "dots"; // imported layouts default to dots (flip to cells anytime)
   beginHistory();
   fitView();
   refresh();
@@ -339,6 +344,7 @@ $("img-file").addEventListener("change", async (e) => {
   $("src-preview").src = url;
   const img = await loadImageEl(url);
   srcImage = imageDataFrom(img);
+  $("view-style").value = "cells"; // a fresh mosaic defaults to cells
   generate();
 });
 $("export").addEventListener("click", () => {
@@ -350,6 +356,7 @@ $("export").addEventListener("click", () => {
   URL.revokeObjectURL(a.href);
 });
 $("preview").addEventListener("click", () => showPreview(model));
+$("view-style").addEventListener("change", draw);
 $("generate").addEventListener("click", generate);
 $("m-cols").addEventListener("input", (e) => { $("m-cols-v").textContent = e.target.value; });
 $("m-cols").addEventListener("change", generate);
