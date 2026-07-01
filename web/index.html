@@ -48,13 +48,15 @@
       .pal-row input[type=color] { width: 24px; height: 18px; padding: 0; border: none; background: none; flex: none; }
       .pal-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       #palette-list { max-height: 220px; overflow-y: auto; }
+      #cl-link { color: #8ab4f8; cursor: pointer; text-decoration: none; }
+      #cl-link:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
     <aside>
       <div>
         <h1>PoE Hideout Editor</h1>
-        <div class="muted" id="app-version">PoE1 &amp; PoE2 · loading…</div>
+        <div class="muted"><span id="app-version">PoE1 &amp; PoE2 · loading…</span> · <a href="#" id="cl-link">changelog</a></div>
       </div>
       <label class="file">Open .hideout<input id="file" type="file" accept=".hideout" /></label>
       <label>Target base

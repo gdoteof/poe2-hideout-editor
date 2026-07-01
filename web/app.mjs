@@ -346,6 +346,65 @@ async function loadVersion() {
     return "PoE1 & PoE2 · dev build";
   }
 }
+// --- changelog modal (renders CHANGELOG.md) ---
+function mdToHtml(md) {
+  const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const inline = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/`(.+?)`/g, "<code>$1</code>");
+  const out = []; let inList = false;
+  for (const raw of md.split("\n")) {
+    const line = raw.replace(/\s+$/, "");
+    const li = line.match(/^\s*-\s+(.*)/);
+    if (li) { if (!inList) { out.push("<ul>"); inList = true; } out.push("<li>" + inline(li[1]) + "</li>"); continue; }
+    if (inList) { out.push("</ul>"); inList = false; }
+    if (/^###\s/.test(line)) out.push("<h4>" + inline(line.slice(4)) + "</h4>");
+    else if (/^##\s/.test(line)) out.push("<h3>" + inline(line.slice(3)) + "</h3>");
+    else if (/^#\s/.test(line)) out.push("<h2>" + inline(line.slice(2)) + "</h2>");
+    else if (line) out.push("<p>" + inline(line) + "</p>");
+  }
+  if (inList) out.push("</ul>");
+  return out.join("\n");
+}
+let changelogHtml = null;
+function injectClStyle() {
+  if (document.getElementById("cl-style")) return;
+  const s = document.createElement("style");
+  s.id = "cl-style";
+  s.textContent = `#cl-modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center}
+  #cl-modal .cl-backdrop{position:absolute;inset:0;background:#000a}
+  #cl-modal .cl-panel{position:relative;max-width:640px;max-height:82vh;width:90%;background:#1b1e24;border:1px solid #2b2f37;border-radius:10px;display:flex;flex-direction:column;box-shadow:0 12px 44px #000b}
+  #cl-modal .cl-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #262a31}
+  #cl-modal .cl-body{padding:2px 20px 18px;overflow:auto}
+  #cl-modal h2{font-size:15px;margin:14px 0 4px}
+  #cl-modal h3{font-size:14px;margin:16px 0 4px;color:#e6ebf2}
+  #cl-modal h4{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#7d8794;margin:9px 0 2px}
+  #cl-modal p{margin:3px 0;color:#c7cdd6;font-size:13px}
+  #cl-modal ul{margin:2px 0 8px 18px;padding:0}
+  #cl-modal li{margin:2px 0;color:#c7cdd6;font-size:13px}
+  #cl-modal code{background:#2a2f38;padding:1px 4px;border-radius:4px;font-size:12px}
+  #cl-modal .cl-close{background:#2a2f38;color:#e6ebf2;border:1px solid #39404b;padding:5px 10px;border-radius:6px;cursor:pointer;font:inherit}`;
+  document.head.appendChild(s);
+}
+async function openChangelog() {
+  injectClStyle();
+  document.getElementById("cl-modal")?.remove();
+  const modal = document.createElement("div");
+  modal.id = "cl-modal";
+  modal.innerHTML = `<div class="cl-backdrop"></div><div class="cl-panel"><div class="cl-head"><b>Changelog</b><button class="cl-close">Close</button></div><div class="cl-body">${changelogHtml ?? "<p>Loading…</p>"}</div></div>`;
+  document.body.appendChild(modal);
+  const close = () => { modal.remove(); document.removeEventListener("keydown", onKey); };
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  modal.querySelector(".cl-backdrop").onclick = close;
+  modal.querySelector(".cl-close").onclick = close;
+  document.addEventListener("keydown", onKey);
+  if (changelogHtml === null) {
+    const body = modal.querySelector(".cl-body");
+    try {
+      const md = await (await fetch("../CHANGELOG.md")).text();
+      changelogHtml = mdToHtml(md);
+      if (body) body.innerHTML = changelogHtml;
+    } catch { if (body) body.textContent = "Changelog unavailable."; }
+  }
+}
 function imageDataFrom(img, maxW = 500) {
   const scale = Math.min(1, maxW / img.naturalWidth);
   const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
@@ -530,6 +589,7 @@ $("export").addEventListener("click", () => {
   URL.revokeObjectURL(a.href);
 });
 $("preview").addEventListener("click", () => showPreview(model));
+$("cl-link").addEventListener("click", (e) => { e.preventDefault(); openChangelog(); });
 $("view-style").addEventListener("change", () => { updateCellSizeRow(); draw(); });
 $("cell-auto").addEventListener("change", () => { $("cell-size").disabled = $("cell-auto").checked; draw(); });
 $("cell-size").addEventListener("input", () => { $("cell-size-v").textContent = $("cell-size").value; draw(); });

@@ -17,6 +17,7 @@ writeFileSync("dist/version.json", JSON.stringify({ version, commit, date }));
 
 // index.html + assets are already root-relative (./app.mjs, ./assets/...)
 copyFileSync("web/index.html", "dist/index.html");
+copyFileSync("CHANGELOG.md", "dist/CHANGELOG.md");
 copyFileSync("web/assets/dickbutt.jpg", "dist/assets/dickbutt.jpg");
 copyFileSync("src/hideout.mjs", "dist/hideout.mjs");
 copyFileSync("src/mosaic.mjs", "dist/mosaic.mjs");
@@ -41,7 +42,8 @@ const app = readFileSync("web/app.mjs", "utf8")
   .replace("../data/palette.json", "./data/palette.json")
   .replace("../data/palette.poe1.json", "./data/palette.poe1.json")
   .replace("../data/hideout-base-catalog.json", "./data/hideout-base-catalog.json")
-  .replace("../data/base-bounds.json", "./data/base-bounds.json");
+  .replace("../data/base-bounds.json", "./data/base-bounds.json")
+  .replace("../CHANGELOG.md", "./CHANGELOG.md");
 writeFileSync("dist/app.mjs", app);
 
 console.log("built dist/");

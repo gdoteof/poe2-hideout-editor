@@ -4,6 +4,11 @@ All notable changes to the PoE Hideout Customizer. Versioning is SemVer (0.x
 pre-1.0, minor bump per feature release); each release is a git tag `vX.Y.Z`, and
 the live build shows `version · commit · date` (from `dist/version.json`).
 
+## [0.11.0] — 2026-07-01
+### Added
+- **In-app changelog** — a "changelog" link by the version opens this file in a
+  modal, so releases are visible without leaving the app.
+
 ## [0.10.0] — 2026-07-01
 ### Added
 - **Ink-item picker** — line-art mode defaults to "Auto (darkest)" but you can
