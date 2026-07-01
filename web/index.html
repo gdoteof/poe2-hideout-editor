@@ -35,6 +35,10 @@
         white-space: nowrap;
       }
       .hint { font-size: 12px; color: #7d8794; }
+      .tools { display: flex; flex-wrap: wrap; gap: 6px; }
+      .tools button { padding: 6px 9px; }
+      button.on { background: #3ab871; color: #06210f; border-color: #3ab871; }
+      select { font: inherit; }
     </style>
   </head>
   <body>
@@ -55,8 +59,28 @@
         <dt>Grid X</dt><dd id="s-x">—</dd>
         <dt>Grid Y</dt><dd id="s-y">—</dd>
       </dl>
-      <button id="export" disabled>Export .hideout</button>
-      <div class="hint">Scroll to zoom · drag to pan · hover a dot for its name. Export re-writes the file byte-for-byte.</div>
+      <div class="tools">
+        <button id="export" disabled>Export .hideout</button>
+        <button id="preview" disabled>Preview</button>
+      </div>
+
+      <div>
+        <div class="muted" style="margin:2px 0 6px">Edit · <span id="sel-info">no selection</span></div>
+        <div class="tools">
+          <button id="rot-l" disabled title="Rotate −90° (Shift+R)">⟲</button>
+          <button id="rot-r" disabled title="Rotate +90° (R)">⟳</button>
+          <button id="flip" disabled title="Flip (F)">Flip</button>
+          <button id="dup" disabled title="Duplicate (D)">Dup</button>
+          <button id="del" disabled title="Delete (Del)">Del</button>
+          <button id="undo" disabled title="Undo (Ctrl+Z)">↶ Undo</button>
+          <button id="redo" disabled title="Redo (Ctrl+Y)">Redo ↷</button>
+        </div>
+        <div class="tools" style="margin-top:6px">
+          <button id="add-toggle">Add on click</button>
+          <select id="add-pick" style="flex:1;min-width:0;background:#2a2f38;color:#e6ebf2;border:1px solid #39404b;border-radius:6px;padding:6px"></select>
+        </div>
+      </div>
+      <div class="hint">Click a decoration to select · drag to move · arrows nudge (Shift ×10) · R rotate · F flip · D dup · Del delete · Ctrl+Z undo. Drag empty space to pan, scroll to zoom. Export re-writes byte-for-byte.</div>
 
       <hr style="border:none;border-top:1px solid #262a31;width:100%;margin:2px 0" />
       <div>

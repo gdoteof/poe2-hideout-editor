@@ -4,7 +4,7 @@
   "description": "Client-side toolkit and visual editor for Path of Exile 2 .hideout files",
   "type": "module",
   "scripts": {
-    "test": "node test/roundtrip.mjs && node test/mosaic.mjs",
+    "test": "node test/roundtrip.mjs && node test/mosaic.mjs && node test/edit.mjs",
     "serve": "python3 -m http.server 8731",
     "build": "node build.mjs",
     "deploy": "node build.mjs && wrangler pages deploy dist"

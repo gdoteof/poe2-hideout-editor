@@ -1,5 +1,9 @@
 import { parseHideout, serializeHideout } from "../src/hideout.mjs";
 import { mosaicFromImage } from "../src/mosaic.mjs";
+import {
+  moveDoodad, rotateDoodad, flipDoodad, deleteDoodad, cloneDoodad, addDoodad, History,
+} from "../src/edit.mjs";
+import { showPreview } from "./preview.mjs";
 
 const cv = document.getElementById("cv");
 const ctx = cv.getContext("2d");
@@ -12,10 +16,16 @@ const MOSAIC_ORIGIN = { x: 380, y: 260 };
 
 let model = null;
 let originalName = "mosaic.hideout";
-let palette = [];
+let palettes = { poe2: [], poe1: [] };
 let bases = [];
 let srcImage = null; // { data, width, height }
 const view = { scale: 1, cx: 0, cy: 0 };
+
+// editing state
+let selected = null; // index into model.doodads, or null
+let history = null; // History over model.doodads snapshots
+let addMode = false;
+let drag = null; // { index, grabDX, grabDY, moved, prepared } | { pan:{x,y} }
 
 const hashHue = (h) => h % 360;
 const doodadColor = (d) => d.hex || `hsl(${hashHue(d.hash)} 65% 60%)`;
@@ -74,8 +84,19 @@ function draw() {
       ctx.fill();
     }
   }
+  // selection highlight
+  if (selected != null && model.doodads[selected]) {
+    const d = model.doodads[selected];
+    const [sx, sy] = worldToScreen(d.x, d.y);
+    const r = Math.max(9, (cell ? cell * view.scale : 8));
+    ctx.lineWidth = 3; ctx.strokeStyle = "#000";
+    ctx.strokeRect(sx - r / 2, sy - r / 2, r, r);
+    ctx.lineWidth = 1.5; ctx.strokeStyle = "#fff";
+    ctx.strokeRect(sx - r / 2, sy - r / 2, r, r);
+  }
 }
 function updateStats() {
+  if (!model) return;
   const d = model.doodads;
   const xs = d.map((o) => o.x), ys = d.map((o) => o.y);
   $("s-base").textContent = model.hideout_name ?? "—";
@@ -85,11 +106,30 @@ function updateStats() {
   $("s-x").textContent = d.length ? `${Math.min(...xs)}–${Math.max(...xs)}` : "—";
   $("s-y").textContent = d.length ? `${Math.min(...ys)}–${Math.max(...ys)}` : "—";
 }
+function updateEditButtons() {
+  const has = selected != null && model?.doodads[selected];
+  ["rot-l", "rot-r", "flip", "dup", "del"].forEach((id) => { $(id).disabled = !has; });
+  $("undo").disabled = !history?.canUndo();
+  $("redo").disabled = !history?.canRedo();
+  $("export").disabled = !model;
+  $("preview").disabled = !model;
+  $("sel-info").textContent = has
+    ? `#${selected} · ${model.doodads[selected].name}`
+    : "no selection";
+}
+function refresh() { updateStats(); updateEditButtons(); draw(); }
 
 // ---------- data loading ----------
-async function loadPalette() {
-  const res = await fetch("../data/palette.json");
-  palette = (await res.json()).colors;
+async function loadPalettes() {
+  const load = async (f) => {
+    try { const r = await fetch(f); if (!r.ok) return []; return (await r.json()).colors ?? []; }
+    catch { return []; }
+  };
+  const [p2, p1] = await Promise.all([
+    load("../data/palette.json"), load("../data/palette.poe1.json"),
+  ]);
+  palettes.poe2 = p2;
+  palettes.poe1 = p1.length ? p1 : p2; // fall back to poe2 palette if poe1 missing
 }
 async function loadBases() {
   const res = await fetch("../data/hideout-base-catalog.json");
@@ -110,12 +150,29 @@ async function loadBases() {
   }
   sel.value = "poe2:30315"; // The Dreadnought — large, good default for mosaics
 }
+function currentGame() {
+  const v = $("base-pick").selectedOptions[0]?.value || "poe2:";
+  return v.startsWith("poe1") ? "poe1" : "poe2";
+}
+function currentPalette() {
+  return palettes[currentGame()]?.length ? palettes[currentGame()] : palettes.poe2;
+}
 // The base a freshly-generated mosaic is placed into (from the picker).
 function currentBase() {
   const opt = $("base-pick").selectedOptions[0];
   return opt?.dataset.hash
     ? { hideout_name: opt.dataset.name, hideout_hash: +opt.dataset.hash }
     : DEFAULT_BASE;
+}
+function populateAddPick() {
+  const sel = $("add-pick");
+  sel.innerHTML = "";
+  for (const c of currentPalette()) {
+    const o = document.createElement("option");
+    o.dataset.name = c.name; o.dataset.hash = c.hash; o.dataset.hex = c.hex;
+    o.textContent = c.name;
+    sel.appendChild(o);
+  }
 }
 function imageDataFrom(img, maxW = 500) {
   const scale = Math.min(1, maxW / img.naturalWidth);
@@ -137,12 +194,51 @@ function loadImageEl(src) {
   });
 }
 
+// ---------- edit ops (commit = apply + push history + redraw) ----------
+function beginHistory() { history = new History(model.doodads); selected = null; }
+function commit(newDoodads, newSelected = selected) {
+  model.doodads = newDoodads;
+  history.push(model.doodads);
+  selected = newSelected;
+  refresh();
+}
+function undo() { if (history?.canUndo()) { model.doodads = history.undo(); selected = null; refresh(); } }
+function redo() { if (history?.canRedo()) { model.doodads = history.redo(); selected = null; refresh(); } }
+function rot(delta) { if (selected != null) commit(rotateDoodad(model.doodads, selected, delta)); }
+function flipSel() { if (selected != null) commit(flipDoodad(model.doodads, selected)); }
+function delSel() { if (selected != null) commit(deleteDoodad(model.doodads, selected), null); }
+function dupSel() {
+  if (selected == null) return;
+  const at = model.doodads.length; // clone is appended at the end
+  commit(cloneDoodad(model.doodads, selected, 8, 8), at);
+}
+function nudge(dx, dy) { if (selected != null) commit(moveDoodad(model.doodads, selected, dx, dy)); }
+function placeAt(wx, wy) {
+  const opt = $("add-pick").selectedOptions[0];
+  if (!opt) return;
+  const at = model.doodads.length;
+  commit(addDoodad(model.doodads, {
+    name: opt.dataset.name, hash: +opt.dataset.hash,
+    x: Math.round(wx), y: Math.round(wy), r: 0, fv: 0, hex: opt.dataset.hex,
+  }), at);
+}
+function pickDoodad(sx, sy) {
+  if (!model) return null;
+  let best = null, bestD = 14 ** 2;
+  model.doodads.forEach((d, i) => {
+    const [x, y] = worldToScreen(d.x, d.y);
+    const dd = (x - sx) ** 2 + (y - sy) ** 2;
+    if (dd < bestD) { bestD = dd; best = i; }
+  });
+  return best;
+}
+
 // ---------- mosaic ----------
 function generate() {
-  if (!srcImage || !palette.length) return;
+  if (!srcImage || !currentPalette().length) return;
   const mode = $("m-mode").value;
   const cols = +$("m-cols").value;
-  const res = mosaicFromImage(srcImage, palette, {
+  const res = mosaicFromImage(srcImage, currentPalette(), {
     mode, cols, step: 2, origin: MOSAIC_ORIGIN,
     inkThreshold: +$("m-ink").value, inkCoverage: 0.16,
     bgHex: "#ffffff", bgTolerance: 16,
@@ -155,11 +251,10 @@ function generate() {
     _hadBom: true,
     _cell: res.step,
   };
+  beginHistory();
   $("m-info").textContent = `${res.used} decorations · ${res.cols}×${res.rows} grid`;
-  updateStats();
   fitView();
-  draw();
-  $("export").disabled = false;
+  refresh();
 }
 
 // ---------- events ----------
@@ -171,10 +266,9 @@ $("file").addEventListener("change", async (e) => {
   // reflect the loaded file's base in the picker (best-effort match by hash)
   const opt = [...$("base-pick").options].find((o) => +o.dataset.hash === model.hideout_hash);
   if (opt) $("base-pick").value = opt.value;
-  updateStats();
+  beginHistory();
   fitView();
-  draw();
-  $("export").disabled = false;
+  refresh();
 });
 $("img-file").addEventListener("change", async (e) => {
   const f = e.target.files[0];
@@ -193,9 +287,8 @@ $("export").addEventListener("click", () => {
   a.click();
   URL.revokeObjectURL(a.href);
 });
+$("preview").addEventListener("click", () => showPreview(model));
 $("generate").addEventListener("click", generate);
-// Changing the target base re-places the current mosaic (not a loaded file).
-$("base-pick").addEventListener("change", () => { if (model?._cell) generate(); });
 $("m-cols").addEventListener("input", (e) => { $("m-cols-v").textContent = e.target.value; });
 $("m-cols").addEventListener("change", generate);
 $("m-ink").addEventListener("input", (e) => { $("m-ink-v").textContent = e.target.value; });
@@ -204,8 +297,49 @@ $("m-mode").addEventListener("change", () => {
   $("m-ink-row").style.display = $("m-mode").value === "ink" ? "" : "none";
   generate();
 });
+$("base-pick").addEventListener("change", () => {
+  populateAddPick(); // palette can change with game
+  if (model?._cell) generate(); // re-place an active mosaic into the new base
+});
 
-// ---------- interaction: zoom / pan / hover ----------
+// edit toolbar
+$("rot-l").addEventListener("click", () => rot(-90));
+$("rot-r").addEventListener("click", () => rot(90));
+$("flip").addEventListener("click", flipSel);
+$("dup").addEventListener("click", dupSel);
+$("del").addEventListener("click", delSel);
+$("undo").addEventListener("click", undo);
+$("redo").addEventListener("click", redo);
+$("add-toggle").addEventListener("click", () => {
+  addMode = !addMode;
+  $("add-toggle").textContent = addMode ? "Adding… (click canvas)" : "Add on click";
+  $("add-toggle").classList.toggle("on", addMode);
+  cv.style.cursor = addMode ? "crosshair" : "";
+});
+
+// keyboard shortcuts
+window.addEventListener("keydown", (e) => {
+  const t = e.target.tagName;
+  if (t === "INPUT" || t === "SELECT" || t === "TEXTAREA") return;
+  const ctrl = e.ctrlKey || e.metaKey;
+  if (ctrl && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if (ctrl && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); return; }
+  if (selected == null) return;
+  switch (e.key) {
+    case "Delete": case "Backspace": e.preventDefault(); delSel(); break;
+    case "r": rot(90); break;
+    case "R": rot(-90); break;
+    case "f": case "F": flipSel(); break;
+    case "d": case "D": dupSel(); break;
+    case "ArrowLeft": e.preventDefault(); nudge(e.shiftKey ? -10 : -1, 0); break;
+    case "ArrowRight": e.preventDefault(); nudge(e.shiftKey ? 10 : 1, 0); break;
+    case "ArrowUp": e.preventDefault(); nudge(0, e.shiftKey ? -10 : -1); break;
+    case "ArrowDown": e.preventDefault(); nudge(0, e.shiftKey ? 10 : 1); break;
+    case "Escape": selected = null; refresh(); break;
+  }
+});
+
+// ---------- interaction: zoom / pan / select / drag / hover ----------
 cv.addEventListener("wheel", (e) => {
   e.preventDefault();
   const [wx, wy] = screenToWorld(e.offsetX, e.offsetY);
@@ -215,27 +349,53 @@ cv.addEventListener("wheel", (e) => {
   view.cy += (nsy - e.offsetY) / view.scale;
   draw();
 }, { passive: false });
-let dragging = null;
-cv.addEventListener("mousedown", (e) => { dragging = { x: e.offsetX, y: e.offsetY }; });
-window.addEventListener("mouseup", () => { dragging = null; });
+cv.addEventListener("mousedown", (e) => {
+  if (!model) return;
+  const [wx, wy] = screenToWorld(e.offsetX, e.offsetY);
+  if (addMode) { placeAt(wx, wy); return; }
+  const idx = pickDoodad(e.offsetX, e.offsetY);
+  if (idx != null) {
+    selected = idx;
+    const d = model.doodads[idx];
+    drag = { index: idx, grabDX: d.x - wx, grabDY: d.y - wy, moved: false, prepared: false };
+    refresh();
+  } else {
+    drag = { pan: { x: e.offsetX, y: e.offsetY } };
+    selected = null;
+    refresh();
+  }
+});
+window.addEventListener("mouseup", () => {
+  if (drag && drag.index != null && drag.moved) history.push(model.doodads);
+  drag = null;
+  updateEditButtons();
+});
 cv.addEventListener("mousemove", (e) => {
-  if (dragging) {
-    view.cx -= (e.offsetX - dragging.x) / view.scale;
-    view.cy -= (e.offsetY - dragging.y) / view.scale;
-    dragging = { x: e.offsetX, y: e.offsetY };
+  if (drag?.pan) {
+    view.cx -= (e.offsetX - drag.pan.x) / view.scale;
+    view.cy -= (e.offsetY - drag.pan.y) / view.scale;
+    drag.pan = { x: e.offsetX, y: e.offsetY };
+    return draw();
+  }
+  if (drag && drag.index != null) {
+    // lazily copy the dragged entry so the last history snapshot isn't mutated
+    if (!drag.prepared) {
+      model.doodads = model.doodads.map((d, i) => (i === drag.index ? { ...d } : d));
+      drag.prepared = true;
+    }
+    const [wx, wy] = screenToWorld(e.offsetX, e.offsetY);
+    const d = model.doodads[drag.index];
+    d.x = Math.round(wx + drag.grabDX);
+    d.y = Math.round(wy + drag.grabDY);
+    drag.moved = true;
     return draw();
   }
   if (!model) return;
-  let best = null, bestD = 100;
-  for (const d of model.doodads) {
-    const [sx, sy] = worldToScreen(d.x, d.y);
-    const dd = (sx - e.offsetX) ** 2 + (sy - e.offsetY) ** 2;
-    if (dd < bestD) { bestD = dd; best = d; }
-  }
-  if (best) {
+  const idx = pickDoodad(e.offsetX, e.offsetY);
+  if (idx != null) {
     tip.style.display = "block";
     tip.style.left = e.offsetX + "px"; tip.style.top = e.offsetY + "px";
-    tip.textContent = best.name;
+    tip.textContent = model.doodads[idx].name;
   } else tip.style.display = "none";
 });
 cv.addEventListener("mouseleave", () => { tip.style.display = "none"; });
@@ -244,7 +404,8 @@ window.addEventListener("resize", resize);
 // ---------- boot ----------
 (async function boot() {
   resize();
-  await Promise.all([loadPalette(), loadBases()]);
+  await Promise.all([loadPalettes(), loadBases()]);
+  populateAddPick();
   const img = await loadImageEl("./assets/dickbutt.jpg");
   srcImage = imageDataFrom(img);
   generate();
