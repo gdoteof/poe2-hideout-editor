@@ -13,12 +13,14 @@ copyFileSync("web/assets/dickbutt.jpg", "dist/assets/dickbutt.jpg");
 copyFileSync("src/hideout.mjs", "dist/hideout.mjs");
 copyFileSync("src/mosaic.mjs", "dist/mosaic.mjs");
 copyFileSync("data/palette.json", "dist/data/palette.json");
+copyFileSync("data/hideout-base-catalog.json", "dist/data/hideout-base-catalog.json");
 
 // rewrite app.mjs import/fetch paths for the flattened layout
 const app = readFileSync("web/app.mjs", "utf8")
   .replace("../src/hideout.mjs", "./hideout.mjs")
   .replace("../src/mosaic.mjs", "./mosaic.mjs")
-  .replace("../data/palette.json", "./data/palette.json");
+  .replace("../data/palette.json", "./data/palette.json")
+  .replace("../data/hideout-base-catalog.json", "./data/hideout-base-catalog.json");
 writeFileSync("dist/app.mjs", app);
 
 console.log("built dist/");

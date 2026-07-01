@@ -13,6 +13,7 @@ const MOSAIC_ORIGIN = { x: 380, y: 260 };
 let model = null;
 let originalName = "mosaic.hideout";
 let palette = [];
+let bases = [];
 let srcImage = null; // { data, width, height }
 const view = { scale: 1, cx: 0, cy: 0 };
 
@@ -90,6 +91,32 @@ async function loadPalette() {
   const res = await fetch("../data/palette.json");
   palette = (await res.json()).colors;
 }
+async function loadBases() {
+  const res = await fetch("../data/hideout-base-catalog.json");
+  bases = (await res.json()).bases;
+  const sel = $("base-pick");
+  for (const game of ["poe2", "poe1"]) {
+    const og = document.createElement("optgroup");
+    og.label = game.toUpperCase();
+    for (const b of bases.filter((x) => x.game === game)) {
+      const o = document.createElement("option");
+      o.value = `${b.game}:${b.hash}`;
+      o.dataset.hash = b.hash;
+      o.dataset.name = b.name;
+      o.textContent = b.name + (b.verified ? "" : " (hash unverified)");
+      og.appendChild(o);
+    }
+    sel.appendChild(og);
+  }
+  sel.value = "poe2:30315"; // The Dreadnought — large, good default for mosaics
+}
+// The base a freshly-generated mosaic is placed into (from the picker).
+function currentBase() {
+  const opt = $("base-pick").selectedOptions[0];
+  return opt?.dataset.hash
+    ? { hideout_name: opt.dataset.name, hideout_hash: +opt.dataset.hash }
+    : DEFAULT_BASE;
+}
 function imageDataFrom(img, maxW = 500) {
   const scale = Math.min(1, maxW / img.naturalWidth);
   const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
@@ -120,7 +147,7 @@ function generate() {
     inkThreshold: +$("m-ink").value, inkCoverage: 0.16,
     bgHex: "#ffffff", bgTolerance: 16,
   });
-  const base = model ?? DEFAULT_BASE;
+  const base = currentBase();
   model = {
     version: 1, language: "English",
     hideout_name: base.hideout_name, hideout_hash: base.hideout_hash,
@@ -141,6 +168,9 @@ $("file").addEventListener("change", async (e) => {
   if (!f) return;
   originalName = f.name;
   model = parseHideout(await f.text());
+  // reflect the loaded file's base in the picker (best-effort match by hash)
+  const opt = [...$("base-pick").options].find((o) => +o.dataset.hash === model.hideout_hash);
+  if (opt) $("base-pick").value = opt.value;
   updateStats();
   fitView();
   draw();
@@ -164,6 +194,8 @@ $("export").addEventListener("click", () => {
   URL.revokeObjectURL(a.href);
 });
 $("generate").addEventListener("click", generate);
+// Changing the target base re-places the current mosaic (not a loaded file).
+$("base-pick").addEventListener("change", () => { if (model?._cell) generate(); });
 $("m-cols").addEventListener("input", (e) => { $("m-cols-v").textContent = e.target.value; });
 $("m-cols").addEventListener("change", generate);
 $("m-ink").addEventListener("input", (e) => { $("m-ink-v").textContent = e.target.value; });
@@ -212,7 +244,7 @@ window.addEventListener("resize", resize);
 // ---------- boot ----------
 (async function boot() {
   resize();
-  await loadPalette();
+  await Promise.all([loadPalette(), loadBases()]);
   const img = await loadImageEl("./assets/dickbutt.jpg");
   srcImage = imageDataFrom(img);
   generate();

@@ -1,0 +1,442 @@
+﻿{
+  "version": 1,
+  "language": "English",
+  "hideout_name": "Felled Hideout",
+  "hideout_hash": 13526,
+  "doodads": {
+    "Stash": {
+      "hash": 3230065491,
+      "x": 285,
+      "y": 171,
+      "r": 58301,
+      "fv": 0
+    },
+    "Guild Stash": {
+      "hash": 139228481,
+      "x": 282,
+      "y": 158,
+      "r": 49307,
+      "fv": 0
+    },
+    "Waypoint": {
+      "hash": 1224707366,
+      "x": 231,
+      "y": 129,
+      "r": 0,
+      "fv": 0
+    },
+    "Ziggurat Map Device": {
+      "hash": 76459657,
+      "x": 240,
+      "y": 164,
+      "r": 64041,
+      "fv": 0
+    },
+    "Relic Locker": {
+      "hash": 12969733,
+      "x": 165,
+      "y": 251,
+      "r": 16290,
+      "fv": 0
+    },
+    "Reforging Bench": {
+      "hash": 3263423625,
+      "x": 178,
+      "y": 306,
+      "r": 61607,
+      "fv": 0
+    },
+    "Salvage Bench": {
+      "hash": 3734046884,
+      "x": 259,
+      "y": 178,
+      "r": 2788,
+      "fv": 0
+    },
+    "Well": {
+      "hash": 2057229261,
+      "x": 279,
+      "y": 145,
+      "r": 45427,
+      "fv": 0
+    },
+    "Recombinator": {
+      "hash": 4243958141,
+      "x": 187,
+      "y": 161,
+      "r": 51657,
+      "fv": 0
+    },
+    "Wardrobe Decoration": {
+      "hash": 2914603195,
+      "x": 190,
+      "y": 143,
+      "r": 16911,
+      "fv": 0
+    },
+    "Ange": {
+      "hash": 2297799330,
+      "x": 209,
+      "y": 159,
+      "r": 12021,
+      "fv": 0
+    },
+    "Alva": {
+      "hash": 2115859440,
+      "x": 225,
+      "y": 172,
+      "r": 2039,
+      "fv": 0
+    },
+    "Zelina": {
+      "hash": 1023253651,
+      "x": 256,
+      "y": 128,
+      "r": 34921,
+      "fv": 0
+    },
+    "Zolin": {
+      "hash": 2204408127,
+      "x": 210,
+      "y": 127,
+      "r": 32342,
+      "fv": 0
+    },
+    "Doryani": {
+      "hash": 3673653565,
+      "x": 278,
+      "y": 179,
+      "r": 4765,
+      "fv": 0
+    },
+    "Rog": {
+      "hash": 408811958,
+      "x": 300,
+      "y": 223,
+      "r": 57344,
+      "fv": 0
+    },
+    "Tujen": {
+      "hash": 1188734792,
+      "x": 302,
+      "y": 190,
+      "r": 45187,
+      "fv": 0
+    },
+    "Dannig": {
+      "hash": 2939302567,
+      "x": 269,
+      "y": 132,
+      "r": 50777,
+      "fv": 0
+    },
+    "Gwennen": {
+      "hash": 2230709308,
+      "x": 294,
+      "y": 181,
+      "r": 59637,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 200,
+      "y": 131,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 283,
+      "y": 137,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 297,
+      "y": 189,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 357,
+      "y": 212,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 361,
+      "y": 287,
+      "r": 61762,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 305,
+      "y": 288,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 285,
+      "y": 325,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 274,
+      "y": 383,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 289,
+      "y": 451,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 316,
+      "y": 474,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 363,
+      "y": 479,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 388,
+      "y": 525,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 415,
+      "y": 520,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 447,
+      "y": 553,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 421,
+      "y": 628,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 375,
+      "y": 627,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 350,
+      "y": 627,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 310,
+      "y": 640,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 312,
+      "y": 590,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 287,
+      "y": 572,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 241,
+      "y": 582,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 195,
+      "y": 590,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 193,
+      "y": 523,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 208,
+      "y": 510,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 240,
+      "y": 499,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 236,
+      "y": 466,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 201,
+      "y": 436,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 196,
+      "y": 415,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 196,
+      "y": 389,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 191,
+      "y": 377,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 173,
+      "y": 358,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 131,
+      "y": 340,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 123,
+      "y": 281,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 133,
+      "y": 235,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 139,
+      "y": 190,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 184,
+      "y": 177,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 237,
+      "y": 352,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 218,
+      "y": 374,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 224,
+      "y": 361,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 251,
+      "y": 360,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 249,
+      "y": 383,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 240,
+      "y": 398,
+      "r": 0,
+      "fv": 0
+    },
+    "Arcane Astronomy Tool": {
+      "hash": 1639315040,
+      "x": 224,
+      "y": 395,
+      "r": 0,
+      "fv": 0
+    }
+  }
+}

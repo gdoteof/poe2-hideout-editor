@@ -1,4 +1,4 @@
-// Lossless, dependency-free reader/writer for PoE2 .hideout files.
+// Lossless, dependency-free reader/writer for PoE1 & PoE2 .hideout files.
 //
 // Why this exists: `doodads` is emitted as a JSON object but contains DUPLICATE
 // KEYS (many doodads share a name). Native JSON.parse silently collapses them,
@@ -129,9 +129,12 @@ function parseJsonOrdered(text) {
 // { version, language, hideout_name, hideout_hash,
 //   doodads: [ { name, hash, x, y, r, fv }, ... ] }   // ordered, dupes kept
 
+const KNOWN_TOP = ["version", "language", "hideout_name", "hideout_hash", "doodads"];
+
 export function parseHideout(text) {
   const hadBom = text.charCodeAt(0) === 0xfeff;
   if (hadBom) text = text.slice(1);
+  const trailing = text.slice(text.trimEnd().length); // trailing whitespace, if any
   const pairs = parseJsonOrdered(text);
   const top = Object.fromEntries(pairs); // meta keys are unique; safe
 
@@ -141,6 +144,11 @@ export function parseHideout(text) {
     return { name, hash: f.hash, x: f.x, y: f.y, r: f.r, fv: f.fv };
   });
 
+  // Preserve any non-standard top-level keys (e.g. PoE1's music_name/music_hash)
+  // and their original order so read->write stays byte-exact.
+  const extra = {};
+  for (const [k, v] of pairs) if (!KNOWN_TOP.includes(k)) extra[k] = v;
+
   return {
     version: top.version,
     language: top.language,
@@ -148,33 +156,43 @@ export function parseHideout(text) {
     hideout_hash: top.hideout_hash,
     doodads,
     _hadBom: hadBom,
+    _trailing: trailing,
+    _topKeys: pairs.map((p) => p[0]),
+    _extra: extra,
   };
 }
 
 // Byte-exact serializer: mirrors JSON.stringify(x, null, 2) formatting while
 // assembling `doodads` from the ordered array (so duplicate names survive).
 export function serializeHideout(model, { bom = true } = {}) {
-  const j = (v) => JSON.stringify(v); // primitives only here
+  const j = (v) => JSON.stringify(v); // top-level values are all primitives
+  const order = model._topKeys ?? KNOWN_TOP;
+  const extra = model._extra ?? {};
   const lines = [];
   lines.push("{");
-  lines.push(`  "version": ${j(model.version)},`);
-  lines.push(`  "language": ${j(model.language)},`);
-  lines.push(`  "hideout_name": ${j(model.hideout_name)},`);
-  lines.push(`  "hideout_hash": ${j(model.hideout_hash)},`);
-  lines.push(`  "doodads": {`);
-  model.doodads.forEach((d, idx) => {
-    const comma = idx === model.doodads.length - 1 ? "" : ",";
-    lines.push(`    ${j(d.name)}: {`);
-    lines.push(`      "hash": ${j(d.hash)},`);
-    lines.push(`      "x": ${j(d.x)},`);
-    lines.push(`      "y": ${j(d.y)},`);
-    lines.push(`      "r": ${j(d.r)},`);
-    lines.push(`      "fv": ${j(d.fv)}`);
-    lines.push(`    }${comma}`);
+  order.forEach((key, ki) => {
+    const comma = ki === order.length - 1 ? "" : ",";
+    if (key === "doodads") {
+      lines.push(`  "doodads": {`);
+      model.doodads.forEach((d, idx) => {
+        const c = idx === model.doodads.length - 1 ? "" : ",";
+        lines.push(`    ${j(d.name)}: {`);
+        lines.push(`      "hash": ${j(d.hash)},`);
+        lines.push(`      "x": ${j(d.x)},`);
+        lines.push(`      "y": ${j(d.y)},`);
+        lines.push(`      "r": ${j(d.r)},`);
+        lines.push(`      "fv": ${j(d.fv)}`);
+        lines.push(`    }${c}`);
+      });
+      lines.push(`  }${comma}`);
+    } else {
+      // Known keys read from the model (so edits apply); others from _extra.
+      const val = KNOWN_TOP.includes(key) ? model[key] : extra[key];
+      lines.push(`  ${j(key)}: ${j(val)}${comma}`);
+    }
   });
-  lines.push(`  }`);
   lines.push("}");
-  return (bom ? BOM : "") + lines.join("\n");
+  return (bom ? BOM : "") + lines.join("\n") + (model._trailing ?? "");
 }
 
 // ---------------------------------------------------------------------------

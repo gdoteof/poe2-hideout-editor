@@ -1,14 +1,21 @@
 {
-  "note": "hideout_hash->base name",
-  "map": {
-    "60415": [
-      "Canal Hideout"
-    ],
-    "30315": [
-      "The Dreadnought Hideout"
-    ],
-    "2292": [
-      "Vastiri Plains Hideout"
-    ]
-  }
+  "note": "Hideout base types. `hash` is the hideout_hash (base identity; import is type-locked to it). `verified` = confirmed from a real .hideout sample on disk (data/samples/); false = hash from a secondary source (community editor bounds maps / GGG game-data dumps), not yet proven against an export. Same base can exist in both games, sometimes with the same hash (Canal=60415), sometimes different.",
+  "bases": [
+    { "game": "poe2", "name": "Canal Hideout", "hash": 60415, "verified": true },
+    { "game": "poe2", "name": "Felled Hideout", "hash": 13526, "verified": true },
+    { "game": "poe2", "name": "Shrine Hideout", "hash": 26805, "verified": true },
+    { "game": "poe2", "name": "The Dreadnought Hideout", "hash": 30315, "verified": true },
+    { "game": "poe2", "name": "Vastiri Plains Hideout", "hash": 2292, "verified": true },
+    { "game": "poe2", "name": "Limestone Hideout", "hash": 12394, "verified": false },
+
+    { "game": "poe1", "name": "Canal Hideout", "hash": 60415, "verified": true },
+    { "game": "poe1", "name": "Shoreline Hideout", "hash": 4638, "verified": true },
+    { "game": "poe1", "name": "Celestial Nebula Hideout", "hash": 35022, "verified": true },
+    { "game": "poe1", "name": "Enigma Hideout", "hash": 47535, "verified": true },
+    { "game": "poe1", "name": "Stately Hideout", "hash": 31968, "verified": true },
+    { "game": "poe1", "name": "Cartographer's Hideout", "hash": 55414, "verified": true },
+    { "game": "poe1", "name": "Enlightened Hideout", "hash": 8897, "verified": true },
+    { "game": "poe1", "name": "Abundance Hideout", "hash": 65379, "verified": true },
+    { "game": "poe1", "name": "Celestial Hideout", "hash": 34604, "verified": false }
+  ]
 }

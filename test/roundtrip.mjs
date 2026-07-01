@@ -14,27 +14,31 @@ import {
 } from "../src/hideout.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dir = join(here, "..", "data", "samples", "poe2");
+const samplesRoot = join(here, "..", "data", "samples");
 
 let pass = 0,
   fail = 0;
 
-for (const name of readdirSync(dir).filter((f) => f.endsWith(".hideout"))) {
-  const original = readFileSync(join(dir, name), "utf8");
-  const model = parseHideout(original);
-  const out = serializeHideout(model, { bom: model._hadBom });
-  if (out === original) {
-    pass++;
-    console.log(`  ok   ${name}  (${model.doodads.length} doodads)`);
-  } else {
-    fail++;
-    console.log(`  FAIL ${name}`);
-    // find first divergence
-    let k = 0;
-    while (k < Math.min(out.length, original.length) && out[k] === original[k]) k++;
-    console.log(`       diverges at ${k}: exp ${JSON.stringify(original.slice(k, k + 40))}`);
-    console.log(`                       got ${JSON.stringify(out.slice(k, k + 40))}`);
-    console.log(`       lengths: original=${original.length} got=${out.length}`);
+for (const game of ["poe1", "poe2"]) {
+  const dir = join(samplesRoot, game);
+  console.log(`[${game}]`);
+  for (const name of readdirSync(dir).filter((f) => f.endsWith(".hideout"))) {
+    const original = readFileSync(join(dir, name), "utf8");
+    const model = parseHideout(original);
+    const out = serializeHideout(model, { bom: model._hadBom });
+    if (out === original) {
+      pass++;
+      console.log(`  ok   ${name}  (${model.doodads.length} doodads)`);
+    } else {
+      fail++;
+      console.log(`  FAIL ${name}`);
+      // find first divergence
+      let k = 0;
+      while (k < Math.min(out.length, original.length) && out[k] === original[k]) k++;
+      console.log(`       diverges at ${k}: exp ${JSON.stringify(original.slice(k, k + 40))}`);
+      console.log(`                       got ${JSON.stringify(out.slice(k, k + 40))}`);
+      console.log(`       lengths: original=${original.length} got=${out.length}`);
+    }
   }
 }
 
