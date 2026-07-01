@@ -60,17 +60,52 @@ function resize() {
   cv.height = Math.floor(r.height);
   draw();
 }
-// Square side (world units) for "cells" view when the model has no known grid
-// step (i.e. an imported hideout rather than a generated mosaic).
+// Fallback square side (world units) for "cells" view.
 const IMPORT_CELL = 6;
+// Adaptive cell size for an imported layout: median nearest-neighbour distance,
+// so squares read as cells at the layout's natural spacing. O(n^2), computed
+// once per model and cached; skipped for very large layouts.
+function computeAutoCell(doodads) {
+  const n = doodads.length;
+  if (n < 2 || n > 2500) return IMPORT_CELL;
+  const dists = [];
+  for (let i = 0; i < n; i++) {
+    const a = doodads[i];
+    let best = Infinity;
+    for (let j = 0; j < n; j++) {
+      if (i === j) continue;
+      const dx = a.x - doodads[j].x, dy = a.y - doodads[j].y;
+      const d = dx * dx + dy * dy;
+      if (d < best) best = d;
+    }
+    if (best < Infinity) dists.push(Math.sqrt(best));
+  }
+  dists.sort((a, b) => a - b);
+  const med = dists[Math.floor(dists.length / 2)] || IMPORT_CELL;
+  return Math.max(2, Math.min(24, Math.round(med)));
+}
+// Effective square side for cells view: manual slider, or auto (mosaic step
+// when known, else adaptive). Auto also mirrors its value into the slider.
+function cellSizeFor() {
+  if (!$("cell-auto").checked) return +$("cell-size").value;
+  let v;
+  if (model._cell != null) v = model._cell;
+  else { if (model._autoCell == null) model._autoCell = computeAutoCell(model.doodads); v = model._autoCell; }
+  $("cell-size").value = Math.max(1, Math.min(24, Math.round(v)));
+  return v;
+}
+function updateCellSizeRow() {
+  $("cell-size-row").style.display = $("view-style").value === "cells" ? "" : "none";
+}
 function draw() {
   // neutral "floor" so decorations of any color read against it
   ctx.fillStyle = "#9aa0a8";
   ctx.fillRect(0, 0, cv.width, cv.height);
   if (!model) return;
   const style = $("view-style").value; // "cells" | "dots" — applies to any source
-  const cellW = model._cell ?? IMPORT_CELL;
+  const cellW = style === "cells" ? cellSizeFor() : IMPORT_CELL;
   if (style === "cells") {
+    $("cell-size-v").textContent = Math.round(cellW);
     const s = Math.max(1, cellW * view.scale);
     for (const d of model.doodads) {
       const [sx, sy] = worldToScreen(d.x, d.y);
@@ -333,6 +368,7 @@ $("file").addEventListener("change", async (e) => {
   const opt = [...$("base-pick").options].find((o) => +o.dataset.hash === model.hideout_hash);
   if (opt) $("base-pick").value = opt.value;
   $("view-style").value = "dots"; // imported layouts default to dots (flip to cells anytime)
+  updateCellSizeRow();
   beginHistory();
   fitView();
   refresh();
@@ -345,6 +381,7 @@ $("img-file").addEventListener("change", async (e) => {
   const img = await loadImageEl(url);
   srcImage = imageDataFrom(img);
   $("view-style").value = "cells"; // a fresh mosaic defaults to cells
+  updateCellSizeRow();
   generate();
 });
 $("export").addEventListener("click", () => {
@@ -356,7 +393,9 @@ $("export").addEventListener("click", () => {
   URL.revokeObjectURL(a.href);
 });
 $("preview").addEventListener("click", () => showPreview(model));
-$("view-style").addEventListener("change", draw);
+$("view-style").addEventListener("change", () => { updateCellSizeRow(); draw(); });
+$("cell-auto").addEventListener("change", () => { $("cell-size").disabled = $("cell-auto").checked; draw(); });
+$("cell-size").addEventListener("input", () => { $("cell-size-v").textContent = $("cell-size").value; draw(); });
 $("generate").addEventListener("click", generate);
 $("m-cols").addEventListener("input", (e) => { $("m-cols-v").textContent = e.target.value; });
 $("m-cols").addEventListener("change", generate);
@@ -486,6 +525,7 @@ window.addEventListener("resize", resize);
   populateAddPick();
   renderPalettePanel();
   applyModeVisibility();
+  updateCellSizeRow();
   const img = await loadImageEl("./assets/dickbutt.jpg");
   srcImage = imageDataFrom(img);
   generate();

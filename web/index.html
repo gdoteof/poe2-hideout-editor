@@ -74,6 +74,10 @@
           <option value="dots">Dots (circles)</option>
         </select>
       </label>
+      <div id="cell-size-row">
+        <label class="knob" style="margin:2px 0"><input id="cell-auto" type="checkbox" checked /> Auto cell size (<span id="cell-size-v">6</span>)</label>
+        <input id="cell-size" type="range" min="1" max="24" value="6" disabled style="width:100%" />
+      </div>
       <div class="tools">
         <button id="export" disabled>Export .hideout</button>
         <button id="preview" disabled>Preview</button>
