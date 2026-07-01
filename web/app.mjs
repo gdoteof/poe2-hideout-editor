@@ -64,6 +64,8 @@ function resize() {
 }
 // Fallback square side (world units) for "cells" view.
 const IMPORT_CELL = 6;
+// Soft cap: hideouts have a decoration limit; warn past this.
+const DECORATION_BUDGET = 2000;
 // Adaptive cell size for an imported layout: median nearest-neighbour distance,
 // so squares read as cells at the layout's natural spacing. O(n^2), computed
 // once per model and cached; skipped for very large layouts.
@@ -189,13 +191,24 @@ async function loadBounds() {
     if (r.ok) boundsMap = (await r.json()).bounds ?? {};
   } catch { boundsMap = {}; }
 }
-// buildable-area polygon for a base, or null. Imported files may not know their
-// game, so fall back to any base key with a matching hash.
-function boundsFor(game, hash) {
+// bounds entry for a base (imported files may not know their game, so fall back
+// to any key with a matching hash).
+function boundsEntry(game, hash) {
   if (hash == null) return null;
-  const e = boundsMap[`${game}:${hash}`]
-    || Object.entries(boundsMap).find(([k]) => k.endsWith(`:${hash}`))?.[1];
-  return e?.poly?.length > 2 ? e.poly : null;
+  return boundsMap[`${game}:${hash}`]
+    || Object.entries(boundsMap).find(([k]) => k.endsWith(`:${hash}`))?.[1] || null;
+}
+function erodePoly(poly, f) {
+  const c = boundsCenter(poly);
+  return poly.map(([x, y]) => [Math.round(c.x + (x - c.x) * f), Math.round(c.y + (y - c.y) * f)]);
+}
+// Usable placement polygon. Convex-hull bounds are loose (they over-cover the
+// true concave buildable edge, causing in-game "location invalid" rejections),
+// so erode those inward; authoritative fre-sch polygons are used as-is.
+function boundsFor(game, hash) {
+  const e = boundsEntry(game, hash);
+  if (!e?.poly || e.poly.length < 3) return null;
+  return e.source === "empirical-hull" ? erodePoly(e.poly, 0.86) : e.poly;
 }
 async function loadBases() {
   const res = await fetch("../data/hideout-base-catalog.json");
@@ -214,7 +227,7 @@ async function loadBases() {
     }
     sel.appendChild(og);
   }
-  sel.value = "poe2:30315"; // The Dreadnought — large, good default for mosaics
+  sel.value = "poe1:35022"; // Celestial Nebula — PoE1 has fine pixel decorations, best demo
 }
 function currentGame() {
   const v = $("base-pick").selectedOptions[0]?.value || "poe2:";
@@ -234,6 +247,23 @@ function effectivePalette() {
   ensurePaletteState();
   const game = currentGame(), pal = currentPalette(), st = paletteState[game];
   return pal.map((c, i) => ({ ...c, hex: st[i].hex })).filter((_, i) => st[i].enabled);
+}
+const hexLuma = (hex) => {
+  const h = hex.replace("#", "");
+  return 0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16);
+};
+// Tile pitch (world units) = the decoration footprint to place at so tiles abut
+// instead of overlapping. Ink mode uses the darkest (ink) entry's pitch; color
+// mode uses the median pitch of enabled entries. Defaults to 2 if unspecified.
+function tilePitch() {
+  const pal = effectivePalette();
+  if (!pal.length) return 2;
+  if ($("m-mode").value === "ink") {
+    const ink = pal.reduce((a, b) => (hexLuma(b.hex) < hexLuma(a.hex) ? b : a));
+    return Math.max(1, Math.round(ink.pitch ?? 2));
+  }
+  const ps = pal.map((c) => c.pitch ?? 2).sort((a, b) => a - b);
+  return Math.max(1, Math.round(ps[Math.floor(ps.length / 2)]));
 }
 function renderPaletteCount() {
   const st = paletteState[currentGame()] || [];
@@ -360,27 +390,33 @@ function generate() {
   const pal = effectivePalette();
   if (!pal.length) { $("m-info").textContent = "Enable at least one palette color"; return; }
   const mode = $("m-mode").value;
-  const cols = +$("m-cols").value;
   const base = currentBase();
   const poly = boundsFor(currentGame(), base.hideout_hash);
   const fit = $("m-fit").checked && poly;
 
-  let step, origin;
+  // step = the decoration's real footprint pitch, so tiles abut (not overlap).
+  const step = fit ? tilePitch() : +$("m-step").value;
+  let cols = +$("m-cols").value;
+  let origin, capNote = "";
+
   if (fit) {
-    // scale the mosaic to fit inside the base's buildable box and center it,
-    // so nothing overflows into off-limits zones
-    const cellW = srcImage.width / cols;
-    const rows = Math.max(1, Math.round(srcImage.height / cellW));
+    // cap resolution so tiles at `step` pitch fit inside the buildable box, and center
     const bb = boundingBox(poly);
-    step = Math.max(1, Math.floor(Math.min((bb.maxX - bb.minX) / cols, (bb.maxY - bb.minY) / rows)));
+    const aspect = srcImage.height / srcImage.width;
+    const colsByW = Math.floor((bb.maxX - bb.minX) / step);
+    const colsByH = Math.floor((bb.maxY - bb.minY) / step / aspect);
+    const capped = Math.max(1, Math.min(cols, colsByW, colsByH));
+    if (capped < cols) capNote = ` · capped ${capped} cols to fit`;
+    cols = capped;
+    const rows = Math.max(1, Math.round(srcImage.height / (srcImage.width / cols)));
     const c = boundsCenter(poly);
     origin = { x: Math.round(c.x - (cols * step) / 2), y: Math.round(c.y - (rows * step) / 2) };
-    // reflect the computed calibration back into the sliders
+    // reflect the computed calibration into the sliders
     $("m-step").value = Math.min(6, step); $("m-step-v").textContent = step;
+    $("m-cols").value = Math.max(30, Math.min(160, cols)); $("m-cols-v").textContent = cols;
     $("m-ox").value = origin.x; $("m-ox-v").textContent = origin.x;
     $("m-oy").value = origin.y; $("m-oy-v").textContent = origin.y;
   } else {
-    step = +$("m-step").value;
     origin = { x: +$("m-ox").value, y: +$("m-oy").value };
   }
 
@@ -407,9 +443,10 @@ function generate() {
     _cell: step,
   };
   beginHistory();
-  const bounds = $("m-fit").checked && !poly ? " · no bounds data for base" : "";
-  const fitNote = fit ? (skipped ? ` · ${skipped} outside bounds skipped` : " · fits in bounds ✓") : "";
-  $("m-info").textContent = `${placements.length} decorations · ${res.cols}×${res.rows} grid${fitNote}${bounds}`;
+  const noBounds = $("m-fit").checked && !poly ? " · no bounds data for base" : "";
+  const skipNote = skipped ? ` · ${skipped} outside bounds skipped` : "";
+  const budgetNote = placements.length > DECORATION_BUDGET ? ` · ⚠ over ~${DECORATION_BUDGET} decoration limit` : "";
+  $("m-info").textContent = `${placements.length} decorations · ${res.cols}×${res.rows} · pitch ${step}${skipNote}${capNote}${budgetNote}${noBounds}`;
   fitView();
   refresh();
 }

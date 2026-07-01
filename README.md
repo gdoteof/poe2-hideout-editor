@@ -65,13 +65,19 @@ npm test    # byte-exact round-trip of all samples + mosaic engine checks
 
 ## Known limitations
 
-- **Palette colors are partly estimated.** Decoration `hash`/`name` values are
-  now **real** (harvested from actual PoE2 files; name↔hash is a verified global
-  1:1 mapping, so they're portable). Ink mode uses a confirmed dark decoration
-  (Black Incense Burner). But most **color-mode** hex values are inferred from
-  each decoration's theme, not yet sampled top-down in-game — so color mosaics
-  may not match the preview until those are verified. True white/skin remain the
-  weakest (best candidates: Light Mural Tile / Faridun Cloth).
+- **Palette = real tiling "pixels" with a measured `pitch`.** Palettes are built
+  from decorations that real hideout art tiles densely (e.g. PoE1 *Volcanic
+  Pebble*, 3349 uses at ~1.4-unit spacing), each tagged with its footprint
+  `pitch`. The mosaic places tiles at that pitch so they abut instead of
+  overlapping. Hashes are real; most **hex colors are still estimated** from
+  theme, so color mosaics may not match the preview until sampled in-game.
+- **PoE2 palette is coarse / hue-limited.** The PoE2 sample corpus is all warm
+  desert/jungle (Faridun/Maraketh/Vaal) with large-pitch decorations — so PoE2
+  mosaics are low-resolution and lack true red/blue/purple/white. PoE1 has fine
+  pixels and is the better demo (hence the default base is Celestial Nebula).
+- **In-game footprint needs confirmation.** `pitch` is measured from real
+  layouts, but the exact in-game tile size per decoration isn't verified — a
+  mosaic may still need a pitch nudge to tile perfectly. Re-test on import.
 - **Bounds accuracy varies by base.** Canal/Felled/Shrine/Limestone (PoE2) use
   exact buildable polygons; every other base uses a convex hull of where real
   decorations sit — conservative but approximate (it can over-cover concave
