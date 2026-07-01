@@ -1,7 +1,7 @@
 import { parseHideout, serializeHideout } from "../src/hideout.mjs";
 import { mosaicFromImage } from "../src/mosaic.mjs";
 import {
-  moveDoodad, rotateDoodad, flipDoodad, deleteDoodad, cloneDoodad, addDoodad, History,
+  setPosition, rotateDoodad, flipDoodad, deleteDoodad, cloneDoodad, addDoodad, History,
 } from "../src/edit.mjs";
 import { pointInPolygon, boundingBox, boundsCenter, clampToBox } from "../src/bounds.mjs";
 import { showPreview } from "./preview.mjs";
@@ -252,18 +252,39 @@ const hexLuma = (hex) => {
   const h = hex.replace("#", "");
   return 0.299 * parseInt(h.slice(0, 2), 16) + 0.587 * parseInt(h.slice(2, 4), 16) + 0.114 * parseInt(h.slice(4, 6), 16);
 };
+// The single decoration used for ink/line-art mode: the user's pick, or auto
+// (darkest enabled). Returns the entry with its current color override.
+function inkEntry() {
+  const pal = currentPalette();
+  if (!pal.length) return null;
+  ensurePaletteState();
+  const st = paletteState[currentGame()];
+  const sel = $("ink-pick").value;
+  if (sel !== "auto" && pal[+sel]) return { ...pal[+sel], hex: st[+sel].hex };
+  const cand = pal.map((c, i) => ({ ...c, hex: st[i].hex })).filter((_, i) => st[i].enabled);
+  const from = cand.length ? cand : pal;
+  return from.reduce((a, b) => (hexLuma(b.hex) < hexLuma(a.hex) ? b : a));
+}
+function populateInkPick() {
+  const sel = $("ink-pick");
+  sel.innerHTML = '<option value="auto">Auto (darkest)</option>';
+  currentPalette().forEach((c, i) => {
+    const o = document.createElement("option");
+    o.value = String(i); o.textContent = c.name;
+    sel.appendChild(o);
+  });
+  sel.value = "auto";
+}
 // Tile pitch (world units) = the decoration footprint to place at so tiles abut
-// instead of overlapping. Ink mode uses the darkest (ink) entry's pitch; color
-// mode uses the median pitch of enabled entries. Defaults to 2 if unspecified.
+// instead of overlapping. Ink mode uses the ink decoration's pitch; color mode
+// uses the LARGEST enabled pitch (so nothing overlaps). Defaults to 2.
 function tilePitch() {
+  if ($("m-mode").value === "ink") {
+    return Math.max(1, Math.round(inkEntry()?.pitch ?? 2));
+  }
   const pal = effectivePalette();
   if (!pal.length) return 2;
-  if ($("m-mode").value === "ink") {
-    const ink = pal.reduce((a, b) => (hexLuma(b.hex) < hexLuma(a.hex) ? b : a));
-    return Math.max(1, Math.round(ink.pitch ?? 2));
-  }
-  const ps = pal.map((c) => c.pitch ?? 2).sort((a, b) => a - b);
-  return Math.max(1, Math.round(ps[Math.floor(ps.length / 2)]));
+  return Math.max(1, Math.round(Math.max(...pal.map((c) => c.pitch ?? 2))));
 }
 function renderPaletteCount() {
   const st = paletteState[currentGame()] || [];
@@ -294,6 +315,7 @@ function renderPalettePanel() {
 function applyModeVisibility() {
   const ink = $("m-mode").value === "ink";
   $("m-ink-row").style.display = ink ? "" : "none";
+  $("ink-pick-row").style.display = ink ? "" : "none";
   $("m-cov-row").style.display = ink ? "" : "none";
   $("m-bg-row").style.display = ink ? "none" : "";
 }
@@ -362,7 +384,12 @@ function dupSel() {
   const at = model.doodads.length; // clone is appended at the end
   commit(cloneDoodad(model.doodads, selected, 8, 8), at);
 }
-function nudge(dx, dy) { if (selected != null) commit(moveDoodad(model.doodads, selected, dx, dy)); }
+function nudge(dx, dy) {
+  if (selected == null) return;
+  const d = model.doodads[selected];
+  const p = clampWorld(d.x + dx, d.y + dy); // keep nudges inside bounds
+  commit(setPosition(model.doodads, selected, p.x, p.y));
+}
 function placeAt(wx, wy) {
   const opt = $("add-pick").selectedOptions[0];
   if (!opt) return;
@@ -387,9 +414,17 @@ function pickDoodad(sx, sy) {
 // ---------- mosaic ----------
 function generate() {
   if (!srcImage) return;
-  const pal = effectivePalette();
-  if (!pal.length) { $("m-info").textContent = "Enable at least one palette color"; return; }
   const mode = $("m-mode").value;
+  // ink mode places ONE chosen decoration; color mode uses the enabled palette
+  let pal;
+  if (mode === "ink") {
+    const ie = inkEntry();
+    if (!ie) { $("m-info").textContent = "No palette loaded"; return; }
+    pal = [ie];
+  } else {
+    pal = effectivePalette();
+    if (!pal.length) { $("m-info").textContent = "Enable at least one palette color"; return; }
+  }
   const base = currentBase();
   const poly = boundsFor(currentGame(), base.hideout_hash);
   const fit = $("m-fit").checked && poly;
@@ -504,6 +539,7 @@ $("m-cols").addEventListener("change", generate);
 $("m-ink").addEventListener("input", (e) => { $("m-ink-v").textContent = e.target.value; });
 $("m-ink").addEventListener("change", generate);
 $("m-mode").addEventListener("change", () => { applyModeVisibility(); generate(); });
+$("ink-pick").addEventListener("change", generate);
 // advanced placement knobs: live value label + regenerate on release
 for (const [id, vid] of [
   ["m-step", "m-step-v"], ["m-ox", "m-ox-v"], ["m-oy", "m-oy-v"],
@@ -518,6 +554,7 @@ $("m-fit").addEventListener("change", () => { updateFitLock(); generate(); });
 $("show-bounds").addEventListener("change", draw);
 $("base-pick").addEventListener("change", () => {
   populateAddPick(); // palette can change with game
+  populateInkPick(); // ink options are per-game
   renderPalettePanel(); // per-game palette tweaks
   if (model?._cell) generate(); // re-place an active mosaic into the new base
 });
@@ -627,6 +664,7 @@ window.addEventListener("resize", resize);
   loadVersion().then((s) => { $("app-version").textContent = s; });
   await Promise.all([loadPalettes(), loadBases(), loadBounds()]);
   populateAddPick();
+  populateInkPick();
   renderPalettePanel();
   applyModeVisibility();
   updateCellSizeRow();

@@ -1,25 +1,15 @@
 {
-  "note": "Small tileable 'pixel' decorations proven in real hideout art; `pitch` = median nearest-neighbour spacing (world units) observed within a single .hideout = the footprint to place them at so tiles abut without blobbing. `hex` top-down colour (measured|est). Harvested from data/samples/poe1/*.hideout (raw-text regex over duplicate-key JSON). Ink mode auto-selects the darkest entry (Volcanic Pebble).",
+  "note": "Small tileable 'pixel' decorations proven in real hideouts; `pitch` = median within-file nearest-neighbour spacing (world units) observed across data/samples/poe1/*.hideout (raw-text regex over duplicate-key JSON) = the footprint to place them at so tiles abut without blobbing. Only genuine fine pixels kept: pitch <= 5 AND used many times. Large/rare decorations (Whare Floor 32, Shoreline Fern 52, Seaweed 55, Maraketh Lantern ~32, single-instance glows) were removed because they blob in color mode. `hex` top-down colour (measured|est). Ink mode auto-selects the darkest entry (Volcanic Pebble, the known ink). Coverage gaps (no small pixel exists in the corpus): green, yellow, orange/bronze, purple only appear as large-pitch decorations and are intentionally omitted.",
   "provisional_colors": true,
   "colors": [
-    { "name": "Volcanic Pebble",          "hash": 4263551471, "hex": "#322f2c", "role": "black/ink", "color": "est", "pitch": 1 },
-    { "name": "Temple Stool",             "hash": 4049587193, "hex": "#6a6157", "role": "warm dark grey", "color": "est", "pitch": 2 },
-    { "name": "Pipe Kit",                 "hash": 871898447,  "hex": "#6f665c", "role": "dark metal grey", "color": "est", "pitch": 3 },
-    { "name": "Stone Pieces",             "hash": 1566776343, "hex": "#837b6e", "role": "light grey rubble", "color": "est", "pitch": 4 },
-    { "name": "Snow Drift",               "hash": 3744632886, "hex": "#dfe3e8", "role": "white/light", "color": "est", "pitch": 2 },
-    { "name": "Frozen Lake",              "hash": 2543617575, "hex": "#a9c4d4", "role": "pale ice blue", "color": "est", "pitch": 1 },
-    { "name": "Blue Light Beam",          "hash": 3967691837, "hex": "#3a6ad6", "role": "blue (accent glow)", "color": "est", "pitch": 8 },
-    { "name": "Cloth Sack",               "hash": 3811116168, "hex": "#a8895a", "role": "tan burlap", "color": "est", "pitch": 1 },
-    { "name": "Sack of Gems",             "hash": 716786426,  "hex": "#6a5340", "role": "dark brown", "color": "est", "pitch": 1 },
-    { "name": "Whare Floor",              "hash": 1569588391, "hex": "#6e4a2e", "role": "warm brown wood floor", "color": "est", "pitch": 32 },
-    { "name": "Bronze Piping",            "hash": 1853817808, "hex": "#8a6a3a", "role": "bronze/orange-brown", "color": "est", "pitch": 1 },
-    { "name": "Kalguur Floor Medallion",  "hash": 1763818140, "hex": "#a8842e", "role": "bronze/gold inlay", "color": "est", "pitch": 8 },
-    { "name": "Maraketh Lantern",         "hash": 1546380709, "hex": "#d98a2e", "role": "warm orange glow", "color": "est", "pitch": 32 },
-    { "name": "Fresh Giblets",            "hash": 1961467171, "hex": "#8f2f28", "role": "red", "color": "est", "pitch": 2 },
-    { "name": "Sand Tussock",             "hash": 146816198,  "hex": "#b6a35a", "role": "straw/sandy yellow", "color": "est", "pitch": 14 },
-    { "name": "Sulphite Light",           "hash": 1999675025, "hex": "#b7c63c", "role": "yellow-green glow", "color": "est", "pitch": 18 },
-    { "name": "Shoreline Fern",           "hash": 2984478824, "hex": "#4a6b34", "role": "green ground", "color": "est", "pitch": 52 },
-    { "name": "Seaweed",                  "hash": 1015947674, "hex": "#34482a", "role": "dark green ground", "color": "est", "pitch": 55 },
-    { "name": "Triskelion Flame",         "hash": 3535134165, "hex": "#7a3fa0", "role": "purple (accent flame)", "color": "est", "pitch": 8 }
+    { "name": "Volcanic Pebble", "hash": 4263551471, "hex": "#322f2c", "role": "black/ink",        "color": "est", "pitch": 1 },
+    { "name": "Sack of Gems",    "hash": 716786426,  "hex": "#6a5340", "role": "dark brown",        "color": "est", "pitch": 1 },
+    { "name": "Temple Stool",    "hash": 4049587193, "hex": "#6a6157", "role": "warm dark grey",    "color": "est", "pitch": 2 },
+    { "name": "Pipe Kit",        "hash": 871898447,  "hex": "#6f665c", "role": "dark metal grey",   "color": "est", "pitch": 3 },
+    { "name": "Stone Pieces",    "hash": 1566776343, "hex": "#837b6e", "role": "light grey rubble", "color": "est", "pitch": 5 },
+    { "name": "Cloth Sack",      "hash": 3811116168, "hex": "#a8895a", "role": "tan burlap",        "color": "est", "pitch": 1 },
+    { "name": "Frozen Lake",     "hash": 2543617575, "hex": "#a9c4d4", "role": "pale ice blue",     "color": "est", "pitch": 1 },
+    { "name": "Snow Drift",      "hash": 3744632886, "hex": "#dfe3e8", "role": "white/light",       "color": "est", "pitch": 2 },
+    { "name": "Fresh Giblets",   "hash": 1961467171, "hex": "#8f2f28", "role": "red",               "color": "est", "pitch": 2 }
   ]
 }

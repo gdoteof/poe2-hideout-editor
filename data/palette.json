@@ -1,26 +1,12 @@
 {
-  "note": "PoE2 mosaic palette. Small tileable 'pixel' decorations proven in real hideout art; `pitch` = median nearest-neighbour spacing (world units) observed within a single .hideout = the footprint to place them at so tiles abut without blobbing. `hex` top-down colour (measured|est). Harvested from data/samples/poe2/*.hideout (raw-text regex over duplicate-key JSON). Ink mode auto-selects the darkest entry (Faridun Cages). NOTE: the PoE2 sample corpus is all warm desert/jungle themes (Faridun/Maraketh/Vaal) so pitches run coarser than PoE1 and true red/blue/purple/white are not represented.",
+  "note": "PoE2 mosaic palette. Small tileable 'pixel' decorations proven in real hideouts; `pitch` = median within-file nearest-neighbour spacing (world units) observed across data/samples/poe2/*.hideout (raw-text regex over duplicate-key JSON) = the footprint to place them at so tiles abut without blobbing. Large/rare decorations (Vaal Potted Plants ~53, Faridun Lights ~51, Faridun Cages ~19, all furniture) were removed because they blob in color mode. `hex` top-down colour (measured|est). Ink mode auto-selects the darkest entry. IMPORTANT LIMITATION: the PoE2 sample corpus contains no genuine pixel-art hideouts, only normal warm desert/jungle (Faridun/Maraketh/Vaal) builds, so NO decoration reaches pitch <= 5. The finest proven pixels here sit at pitch 6-10, so PoE2 mosaics are inherently coarser than PoE1 and the mosaic engine should use a larger `step`. There is no small dark/black, grey, white, blue, red or purple pixel in the corpus, so ink mode falls back to the darkest available (green Forest Fern) and those hues are unavailable.",
   "provisional_colors": true,
   "colors": [
-    { "name": "Faridun Cages",           "hash": 4201908741, "hex": "#2d2b29", "role": "black/ink (dark iron)", "color": "est", "pitch": 19 },
-    { "name": "Faridun Barricade",        "hash": 1242587291, "hex": "#6e5433", "role": "dark wood brown", "color": "est", "pitch": 35 },
-    { "name": "Faridun Cargo",            "hash": 3225797304, "hex": "#8a6f47", "role": "brown crates/sacks", "color": "est", "pitch": 29 },
-    { "name": "Faridun Cloth",            "hash": 3972091508, "hex": "#9a5a3f", "role": "warm tan/brown", "color": "est", "pitch": 46 },
-    { "name": "Maraketh Decor",           "hash": 2125171205, "hex": "#b0764a", "role": "terracotta", "color": "est", "pitch": 10 },
-    { "name": "Maraketh Spire",           "hash": 563484177,  "hex": "#c2a678", "role": "sandstone tan", "color": "est", "pitch": 10 },
-    { "name": "Falling Sand",             "hash": 3853073345, "hex": "#cbb88a", "role": "light sand", "color": "est", "pitch": 9 },
-    { "name": "Faridun Tools",            "hash": 2233574719, "hex": "#969981", "role": "neutral grey", "color": "measured", "pitch": 32 },
-    { "name": "Faridun Weapons",          "hash": 2061030970, "hex": "#8a8a90", "role": "steel grey", "color": "est", "pitch": 40 },
-    { "name": "Faridun Chains",           "hash": 3148939699, "hex": "#6a6a6e", "role": "iron grey", "color": "est", "pitch": 42 },
-    { "name": "Faridun Burner",           "hash": 84313841,   "hex": "#d8802a", "role": "orange", "color": "est", "pitch": 10 },
-    { "name": "Maraketh Fire Pot",        "hash": 57228444,   "hex": "#d86a2a", "role": "orange flame", "color": "est", "pitch": 15 },
-    { "name": "Maraketh Treasure",        "hash": 1078696835, "hex": "#c8a13a", "role": "gold/yellow", "color": "est", "pitch": 9 },
-    { "name": "Arcane Astronomy Tool",    "hash": 1639315040, "hex": "#9a7b3a", "role": "brass/bronze", "color": "est", "pitch": 33 },
-    { "name": "Faridun Lights",           "hash": 3954940097, "hex": "#e6b84f", "role": "warm yellow", "color": "est", "pitch": 51 },
-    { "name": "Forest Fern",              "hash": 145306441,  "hex": "#46612b", "role": "green", "color": "est", "pitch": 6 },
-    { "name": "Leaf Pile",                "hash": 4294658310, "hex": "#4a5a2e", "role": "green-brown foliage", "color": "est", "pitch": 7 },
-    { "name": "Fringe Moss",              "hash": 1459723677, "hex": "#414226", "role": "dark olive", "color": "measured", "pitch": 26 },
-    { "name": "Vaal Potted Plants",       "hash": 733910357,  "hex": "#3a5a2a", "role": "dark green foliage", "color": "est", "pitch": 53 },
-    { "name": "Vaal Market Clusters",     "hash": 3294019434, "hex": "#9a7550", "role": "mixed market brown", "color": "est", "pitch": 30 }
+    { "name": "Forest Fern",       "hash": 145306441,  "hex": "#46612b", "role": "green (darkest / ink)", "color": "est", "pitch": 6 },
+    { "name": "Leaf Pile",         "hash": 4294658310, "hex": "#4a5a2e", "role": "green-brown foliage",   "color": "est", "pitch": 7 },
+    { "name": "Maraketh Decor",    "hash": 2125171205, "hex": "#b0764a", "role": "terracotta",            "color": "est", "pitch": 10 },
+    { "name": "Maraketh Treasure", "hash": 1078696835, "hex": "#c8a13a", "role": "gold/yellow",           "color": "est", "pitch": 9 },
+    { "name": "Maraketh Spire",    "hash": 563484177,  "hex": "#c2a678", "role": "sandstone tan",         "color": "est", "pitch": 10 },
+    { "name": "Falling Sand",      "hash": 3853073345, "hex": "#cbb88a", "role": "light sand",            "color": "est", "pitch": 9 }
   ]
 }
