@@ -39,6 +39,15 @@
       .tools button { padding: 6px 9px; }
       button.on { background: #3ab871; color: #06210f; border-color: #3ab871; }
       select { font: inherit; }
+      details { border-top: 1px solid #262a31; padding-top: 8px; }
+      summary { cursor: pointer; color: #9aa2ad; font-size: 12px; user-select: none; }
+      details[open] summary { margin-bottom: 8px; }
+      .knob { display: block; margin: 8px 0; font-size: 12px; }
+      .knob input[type=range] { width: 100%; }
+      .pal-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; font-size: 12px; }
+      .pal-row input[type=color] { width: 24px; height: 18px; padding: 0; border: none; background: none; flex: none; }
+      .pal-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      #palette-list { max-height: 220px; overflow-y: auto; }
     </style>
   </head>
   <body>
@@ -102,6 +111,31 @@
       <label id="m-ink-row">Line sensitivity: <span id="m-ink-v">130</span>
         <input id="m-ink" type="range" min="60" max="200" value="130" style="width:100%" />
       </label>
+      <details>
+        <summary>Advanced placement</summary>
+        <label class="knob">Spacing: <span id="m-step-v">2</span>
+          <input id="m-step" type="range" min="1" max="6" value="2" />
+        </label>
+        <label class="knob">Offset X: <span id="m-ox-v">380</span>
+          <input id="m-ox" type="range" min="0" max="900" value="380" />
+        </label>
+        <label class="knob">Offset Y: <span id="m-oy-v">260</span>
+          <input id="m-oy" type="range" min="0" max="1200" value="260" />
+        </label>
+        <label class="knob"><input id="m-flipy" type="checkbox" /> Flip vertical</label>
+        <label class="knob" id="m-cov-row">Ink coverage: <span id="m-cov-v">0.16</span>
+          <input id="m-cov" type="range" min="0.05" max="0.5" step="0.01" value="0.16" />
+        </label>
+        <label class="knob" id="m-bg-row">Background <input id="m-bg" type="color" value="#ffffff" />
+          · tol <span id="m-bgtol-v">16</span>
+          <input id="m-bgtol" type="range" min="0" max="60" value="16" />
+        </label>
+      </details>
+      <details>
+        <summary>Palette <span id="pal-count" class="muted"></span></summary>
+        <div class="hint" style="margin-bottom:6px">Uncheck to exclude a color from matching; click a swatch to recolor. Ink mode uses the darkest enabled color.</div>
+        <div id="palette-list"></div>
+      </details>
       <button id="generate">Generate mosaic</button>
       <div class="hint" id="m-info">—</div>
     </aside>

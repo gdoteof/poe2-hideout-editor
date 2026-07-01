@@ -12,11 +12,12 @@ const $ = (id) => document.getElementById(id);
 
 // Default base to place a from-scratch mosaic into (The Dreadnought — large).
 const DEFAULT_BASE = { hideout_name: "The Dreadnought Hideout", hideout_hash: 30315 };
-const MOSAIC_ORIGIN = { x: 380, y: 260 };
 
 let model = null;
 let originalName = "mosaic.hideout";
 let palettes = { poe2: [], poe1: [] };
+// per-game palette tweaks: parallel to palettes[game], { enabled, hex }
+const paletteState = { poe2: null, poe1: null };
 let bases = [];
 let srcImage = null; // { data, width, height }
 const view = { scale: 1, cx: 0, cy: 0 };
@@ -157,6 +158,50 @@ function currentGame() {
 function currentPalette() {
   return palettes[currentGame()]?.length ? palettes[currentGame()] : palettes.poe2;
 }
+function ensurePaletteState() {
+  const game = currentGame();
+  if (!paletteState[game]) {
+    paletteState[game] = currentPalette().map((c) => ({ enabled: true, hex: c.hex }));
+  }
+}
+// palette actually fed to the mosaic engine: enabled entries, recolored overrides applied
+function effectivePalette() {
+  ensurePaletteState();
+  const game = currentGame(), pal = currentPalette(), st = paletteState[game];
+  return pal.map((c, i) => ({ ...c, hex: st[i].hex })).filter((_, i) => st[i].enabled);
+}
+function renderPaletteCount() {
+  const st = paletteState[currentGame()] || [];
+  $("pal-count").textContent = `${st.filter((s) => s.enabled).length}/${st.length}`;
+}
+function renderPalettePanel() {
+  ensurePaletteState();
+  const game = currentGame(), pal = currentPalette(), st = paletteState[game];
+  const list = $("palette-list");
+  list.innerHTML = "";
+  pal.forEach((c, i) => {
+    const row = document.createElement("label");
+    row.className = "pal-row";
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = st[i].enabled;
+    cb.addEventListener("change", () => { st[i].enabled = cb.checked; renderPaletteCount(); if (model?._cell) generate(); });
+    const col = document.createElement("input");
+    col.type = "color"; col.value = st[i].hex;
+    col.addEventListener("input", () => { st[i].hex = col.value; });
+    col.addEventListener("change", () => { st[i].hex = col.value; if (model?._cell) generate(); });
+    const nm = document.createElement("span");
+    nm.className = "pal-name"; nm.textContent = c.name;
+    row.append(cb, col, nm);
+    list.appendChild(row);
+  });
+  renderPaletteCount();
+}
+function applyModeVisibility() {
+  const ink = $("m-mode").value === "ink";
+  $("m-ink-row").style.display = ink ? "" : "none";
+  $("m-cov-row").style.display = ink ? "" : "none";
+  $("m-bg-row").style.display = ink ? "none" : "";
+}
 // The base a freshly-generated mosaic is placed into (from the picker).
 function currentBase() {
   const opt = $("base-pick").selectedOptions[0];
@@ -245,13 +290,20 @@ function pickDoodad(sx, sy) {
 
 // ---------- mosaic ----------
 function generate() {
-  if (!srcImage || !currentPalette().length) return;
+  if (!srcImage) return;
+  const pal = effectivePalette();
+  if (!pal.length) { $("m-info").textContent = "Enable at least one palette color"; return; }
   const mode = $("m-mode").value;
   const cols = +$("m-cols").value;
-  const res = mosaicFromImage(srcImage, currentPalette(), {
-    mode, cols, step: 2, origin: MOSAIC_ORIGIN,
-    inkThreshold: +$("m-ink").value, inkCoverage: 0.16,
-    bgHex: "#ffffff", bgTolerance: 16,
+  const res = mosaicFromImage(srcImage, pal, {
+    mode, cols,
+    step: +$("m-step").value,
+    origin: { x: +$("m-ox").value, y: +$("m-oy").value },
+    flipY: $("m-flipy").checked,
+    inkThreshold: +$("m-ink").value,
+    inkCoverage: +$("m-cov").value,
+    bgHex: $("m-bg").value,
+    bgTolerance: +$("m-bgtol").value,
   });
   const base = currentBase();
   model = {
@@ -303,12 +355,20 @@ $("m-cols").addEventListener("input", (e) => { $("m-cols-v").textContent = e.tar
 $("m-cols").addEventListener("change", generate);
 $("m-ink").addEventListener("input", (e) => { $("m-ink-v").textContent = e.target.value; });
 $("m-ink").addEventListener("change", generate);
-$("m-mode").addEventListener("change", () => {
-  $("m-ink-row").style.display = $("m-mode").value === "ink" ? "" : "none";
-  generate();
-});
+$("m-mode").addEventListener("change", () => { applyModeVisibility(); generate(); });
+// advanced placement knobs: live value label + regenerate on release
+for (const [id, vid] of [
+  ["m-step", "m-step-v"], ["m-ox", "m-ox-v"], ["m-oy", "m-oy-v"],
+  ["m-cov", "m-cov-v"], ["m-bgtol", "m-bgtol-v"],
+]) {
+  $(id).addEventListener("input", () => { $(vid).textContent = $(id).value; });
+  $(id).addEventListener("change", generate);
+}
+$("m-flipy").addEventListener("change", generate);
+$("m-bg").addEventListener("change", generate);
 $("base-pick").addEventListener("change", () => {
   populateAddPick(); // palette can change with game
+  renderPalettePanel(); // per-game palette tweaks
   if (model?._cell) generate(); // re-place an active mosaic into the new base
 });
 
@@ -417,6 +477,8 @@ window.addEventListener("resize", resize);
   loadVersion().then((s) => { $("app-version").textContent = s; });
   await Promise.all([loadPalettes(), loadBases()]);
   populateAddPick();
+  renderPalettePanel();
+  applyModeVisibility();
   const img = await loadImageEl("./assets/dickbutt.jpg");
   srcImage = imageDataFrom(img);
   generate();
