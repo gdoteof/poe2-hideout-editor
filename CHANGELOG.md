@@ -4,6 +4,14 @@ All notable changes to the PoE Hideout Customizer. Versioning is SemVer (0.x
 pre-1.0, minor bump per feature release); each release is a git tag `vX.Y.Z`, and
 the live build shows `version · commit · date` (from `dist/version.json`).
 
+## [0.12.1] — 2026-07-01
+### Fixed
+- **Decoration ownership** is the likely reason imports "showed nothing / didn't
+  respond to item changes": you can only place decorations you own. Added
+  **Primeval Debris** (cheap, bulk-farmable — the community-standard pixel-art
+  decoration used by NeverDecaf's tool) as the default ink so exports use an
+  obtainable decoration. Stock up (~hundreds) before importing.
+
 ## [0.12.0] — 2026-07-01
 ### Added
 - **Dithering** (Floyd–Steinberg / ordered Bayer) in color mode — interleaves the

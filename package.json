@@ -1,6 +1,6 @@
 {
   "name": "poe2-hideout-tools",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Client-side toolkit and visual editor for Path of Exile 2 .hideout files",
   "type": "module",
   "scripts": {

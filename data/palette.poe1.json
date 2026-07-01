@@ -2,6 +2,7 @@
   "note": "Small tileable 'pixel' decorations proven in real hideouts; `pitch` = median within-file nearest-neighbour spacing (world units) observed across data/samples/poe1/*.hideout (raw-text regex over duplicate-key JSON) = the footprint to place them at so tiles abut without blobbing. Only genuine fine pixels kept: pitch <= 5 AND used many times. Large/rare decorations (Whare Floor 32, Shoreline Fern 52, Seaweed 55, Maraketh Lantern ~32, single-instance glows) were removed because they blob in color mode. `hex` top-down colour (measured|est). Ink mode auto-selects the darkest entry (Volcanic Pebble, the known ink). Coverage gaps (no small pixel exists in the corpus): green, yellow, orange/bronze, purple only appear as large-pitch decorations and are intentionally omitted.",
   "provisional_colors": true,
   "colors": [
+    { "name": "Primeval Debris", "hash": 2706854561, "hex": "#2b2b2b", "role": "black/ink (cheap, bulk-farmable — community standard for pixel art)", "color": "est", "pitch": 2 },
     { "name": "Volcanic Pebble", "hash": 4263551471, "hex": "#322f2c", "role": "black/ink",        "color": "est", "pitch": 1 },
     { "name": "Sack of Gems",    "hash": 716786426,  "hex": "#6a5340", "role": "dark brown",        "color": "est", "pitch": 1 },
     { "name": "Temple Stool",    "hash": 4049587193, "hex": "#6a6157", "role": "warm dark grey",    "color": "est", "pitch": 2 },
