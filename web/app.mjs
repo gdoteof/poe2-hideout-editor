@@ -174,6 +174,16 @@ function populateAddPick() {
     sel.appendChild(o);
   }
 }
+async function loadVersion() {
+  try {
+    const r = await fetch("./version.json");
+    if (!r.ok) throw 0;
+    const v = await r.json();
+    return `PoE1 & PoE2 · v${v.version} · ${v.commit} · ${v.date}`;
+  } catch {
+    return "PoE1 & PoE2 · dev build";
+  }
+}
 function imageDataFrom(img, maxW = 500) {
   const scale = Math.min(1, maxW / img.naturalWidth);
   const w = Math.round(img.naturalWidth * scale), h = Math.round(img.naturalHeight * scale);
@@ -404,6 +414,7 @@ window.addEventListener("resize", resize);
 // ---------- boot ----------
 (async function boot() {
   resize();
+  loadVersion().then((s) => { $("app-version").textContent = s; });
   await Promise.all([loadPalettes(), loadBases()]);
   populateAddPick();
   const img = await loadImageEl("./assets/dickbutt.jpg");

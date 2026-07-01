@@ -2,10 +2,18 @@
 // The dev app (web/) imports ../src and ../data; here we flatten those paths so
 // index.html can be served from the site root.
 import { mkdirSync, copyFileSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { execSync } from "node:child_process";
 
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist/assets", { recursive: true });
 mkdirSync("dist/data", { recursive: true });
+
+// Build stamp: SemVer from package.json + git short-SHA + date, for the UI.
+const version = JSON.parse(readFileSync("package.json", "utf8")).version;
+let commit = "unknown";
+try { commit = execSync("git rev-parse --short HEAD").toString().trim(); } catch { /* not a git checkout */ }
+const date = new Date().toISOString().slice(0, 10);
+writeFileSync("dist/version.json", JSON.stringify({ version, commit, date }));
 
 // index.html + assets are already root-relative (./app.mjs, ./assets/...)
 copyFileSync("web/index.html", "dist/index.html");
