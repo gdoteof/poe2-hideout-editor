@@ -4,6 +4,19 @@ All notable changes to the PoE Hideout Customizer. Versioning is SemVer (0.x
 pre-1.0, minor bump per feature release); each release is a git tag `vX.Y.Z`, and
 the live build shows `version · commit · date` (from `dist/version.json`).
 
+## [0.12.0] — 2026-07-01
+### Added
+- **Dithering** (Floyd–Steinberg / ordered Bayer) in color mode — interleaves the
+  small palette so it reads as many more tones/gradients instead of hard bands.
+- **Outline edges** — lays the darkest (ink) decoration along Sobel-detected edges
+  on top of the color fill (cel-shading readability; the "outline + fill" artist kit).
+- **Orientation** control — rotates the whole layout (and each tile's `r`) so a
+  mosaic can sit upright on the 45° isometric floor instead of tilted. Calibrate
+  the angle in-game (try ~45°).
+### Notes
+- Per-tile gradient rotation was evaluated and dropped — it fragments line art and
+  the reference tool disabled it too. Rotation is used globally, not per-tile.
+
 ## [0.11.0] — 2026-07-01
 ### Added
 - **In-app changelog** — a "changelog" link by the version opens this file in a

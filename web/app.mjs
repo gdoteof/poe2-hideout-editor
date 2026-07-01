@@ -1,4 +1,4 @@
-import { parseHideout, serializeHideout } from "../src/hideout.mjs";
+import { parseHideout, serializeHideout, degreesToR } from "../src/hideout.mjs";
 import { mosaicFromImage } from "../src/mosaic.mjs";
 import {
   setPosition, rotateDoodad, flipDoodad, deleteDoodad, cloneDoodad, addDoodad, History,
@@ -318,6 +318,8 @@ function applyModeVisibility() {
   $("ink-pick-row").style.display = ink ? "" : "none";
   $("m-cov-row").style.display = ink ? "" : "none";
   $("m-bg-row").style.display = ink ? "none" : "";
+  $("m-dither-row").style.display = ink ? "none" : "";
+  $("m-outline-row").style.display = ink ? "none" : "";
 }
 // The base a freshly-generated mosaic is placed into (from the picker).
 function currentBase() {
@@ -521,9 +523,23 @@ function generate() {
     inkCoverage: +$("m-cov").value,
     bgHex: $("m-bg").value,
     bgTolerance: +$("m-bgtol").value,
+    dither: $("m-dither").value,
+    outline: $("m-outline").checked,
   });
 
   let placements = res.placements, skipped = 0;
+  // orientation: rotate the whole layout (and tiles) so it sits upright on the iso floor
+  const orientDeg = +$("m-orient").value;
+  if (orientDeg && placements.length) {
+    const rad = orientDeg * Math.PI / 180, cos = Math.cos(rad), sin = Math.sin(rad);
+    const cx = placements.reduce((s, p) => s + p.x, 0) / placements.length;
+    const cy = placements.reduce((s, p) => s + p.y, 0) / placements.length;
+    const rr = degreesToR(orientDeg);
+    placements = placements.map((p) => {
+      const dx = p.x - cx, dy = p.y - cy;
+      return { ...p, x: Math.round(cx + dx * cos - dy * sin), y: Math.round(cy + dx * sin + dy * cos), r: rr };
+    });
+  }
   if (fit) {
     const inside = placements.filter((p) => pointInPolygon(p.x, p.y, poly));
     skipped = placements.length - inside.length;
@@ -610,6 +626,10 @@ for (const [id, vid] of [
 }
 $("m-flipy").addEventListener("change", generate);
 $("m-bg").addEventListener("change", generate);
+$("m-orient").addEventListener("input", () => { $("m-orient-v").textContent = $("m-orient").value; });
+$("m-orient").addEventListener("change", generate);
+$("m-dither").addEventListener("change", generate);
+$("m-outline").addEventListener("change", generate);
 $("m-fit").addEventListener("change", () => { updateFitLock(); generate(); });
 $("show-bounds").addEventListener("change", draw);
 $("base-pick").addEventListener("change", () => {

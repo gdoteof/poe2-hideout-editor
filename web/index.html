@@ -142,6 +142,17 @@
           <input id="m-oy" type="range" min="0" max="1200" value="260" />
         </label>
         <label class="knob"><input id="m-flipy" type="checkbox" /> Flip vertical</label>
+        <label class="knob">Orientation: <span id="m-orient-v">0</span>° <span class="muted">(rotate upright on the iso floor — try ~45°)</span>
+          <input id="m-orient" type="range" min="0" max="345" step="15" value="0" />
+        </label>
+        <label class="knob" id="m-dither-row">Dither
+          <select id="m-dither" style="width:100%;margin-top:3px;background:#2a2f38;color:#e6ebf2;border:1px solid #39404b;border-radius:6px;padding:6px">
+            <option value="none" selected>None</option>
+            <option value="fs">Floyd–Steinberg (smooth)</option>
+            <option value="bayer">Ordered (Bayer)</option>
+          </select>
+        </label>
+        <label class="knob" id="m-outline-row"><input id="m-outline" type="checkbox" /> Outline edges (ink over fill)</label>
         <label class="knob" id="m-cov-row">Ink coverage: <span id="m-cov-v">0.16</span>
           <input id="m-cov" type="range" min="0.05" max="0.5" step="0.01" value="0.16" />
         </label>

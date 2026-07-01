@@ -67,6 +67,11 @@ function darkest(prepared) {
 //   inkThreshold    a pixel counts as "ink" if its luma is below this      [110]
 //   inkCoverage     place a doodad if this fraction of the cell is ink     [0.18]
 //   inkHex          ink color; defaults to the darkest palette entry       [auto]
+//   -- color-quality options --
+//   dither          'none' | 'fs' (Floyd–Steinberg) | 'bayer' (ordered)   ['none']
+//   outline         also lay the darkest (ink) decoration along strong     [false]
+//                   image edges, on top of the fill (cel-shading readability)
+//   outlineThreshold  Sobel gradient magnitude above which a cell is edge  [60]
 export function mosaicFromImage(image, palette, opts = {}) {
   const {
     mode = "color",
@@ -80,19 +85,24 @@ export function mosaicFromImage(image, palette, opts = {}) {
     inkThreshold = 110,
     inkCoverage = 0.18,
     inkHex = null,
+    dither = "none",
+    outline = false,
+    outlineThreshold = 60,
   } = opts;
   if (!cols || cols < 1) throw new Error("cols must be >= 1");
 
   const prepared = preparePalette(palette);
   const bgLab = bgHex ? rgbToLab(...hexToRgb(bgHex)) : null;
-  const ink = mode === "ink"
-    ? (inkHex ? preparePalette([palette.find((p) => p.hex.toLowerCase() === inkHex.toLowerCase()) ?? palette[0]])[0] : darkest(prepared))
-    : null;
+  // ink decoration: explicit for ink mode; darkest palette entry otherwise (outline)
+  const ink = inkHex
+    ? preparePalette([palette.find((p) => p.hex.toLowerCase() === inkHex.toLowerCase()) ?? palette[0]])[0]
+    : darkest(prepared);
 
   const { data, width, height } = image;
   const cellW = width / cols;
   const rows = Math.max(1, Math.round(height / cellW));
   const cellH = height / rows;
+  const N = rows * cols;
 
   const place = (col, row, p) => {
     const wx = origin.x + col * step;
@@ -100,12 +110,11 @@ export function mosaicFromImage(image, palette, opts = {}) {
     return { name: p.name, hash: p.hash, x: Math.round(wx), y: Math.round(wy), r: 0, fv: 0, hex: p.hex };
   };
 
-  const placements = [];
-  let scanned = 0, empty = 0;
-
+  // pass 1: aggregate each cell's mean color, coverage, luma
+  const cR = new Float32Array(N), cG = new Float32Array(N), cB = new Float32Array(N);
+  const cA = new Float32Array(N), cInk = new Float32Array(N), cLuma = new Float32Array(N);
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      scanned++;
       const x0 = Math.floor(col * cellW), x1 = Math.min(width, Math.ceil((col + 1) * cellW));
       const y0 = Math.floor(row * cellH), y1 = Math.min(height, Math.ceil((row + 1) * cellH));
       let r = 0, g = 0, b = 0, a = 0, n = 0, inkPx = 0;
@@ -118,24 +127,65 @@ export function mosaicFromImage(image, palette, opts = {}) {
           if (al >= 128 && luma(data[i], data[i + 1], data[i + 2]) < inkThreshold) inkPx++;
         }
       }
-
-      if (mode === "ink") {
-        if (n && inkPx / n >= inkCoverage) placements.push(place(col, row, ink));
-        else empty++;
-        continue;
-      }
-
-      // color mode
-      const avgA = n ? a / n : 0;
-      if (avgA < alphaThreshold) { empty++; continue; }
-      const R = r / a, G = g / a, B = b / a; // alpha-weighted mean color
-      const lab = rgbToLab(R, G, B);
-      if (bgLab) {
-        const d = (bgLab[0] - lab[0]) ** 2 + (bgLab[1] - lab[1]) ** 2 + (bgLab[2] - lab[2]) ** 2;
-        if (d < bgTolerance * bgTolerance) { empty++; continue; }
-      }
-      placements.push(place(col, row, nearest(prepared, lab)));
+      const k = row * cols + col;
+      cA[k] = n ? a / n : 0;
+      cInk[k] = n ? inkPx / n : 0;
+      if (a) { cR[k] = r / a; cG[k] = g / a; cB[k] = b / a; }
+      cLuma[k] = luma(cR[k], cG[k], cB[k]);
     }
   }
-  return { placements, cols, rows, step, scanned, empty, used: placements.length };
+
+  const placements = [];
+  let empty = 0;
+
+  if (mode === "ink") {
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        if (cInk[row * cols + col] >= inkCoverage) placements.push(place(col, row, ink));
+        else empty++;
+      }
+    }
+  } else {
+    // color mode, with optional dithering to fake more tones than the palette has
+    const errR = new Float32Array(N), errG = new Float32Array(N), errB = new Float32Array(N);
+    const BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+    const clamp = (v) => (v < 0 ? 0 : v > 255 ? 255 : v);
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const k = row * cols + col;
+        if (cA[k] < alphaThreshold) { empty++; continue; }
+        let R = cR[k], G = cG[k], B = cB[k];
+        if (dither === "fs") { R += errR[k]; G += errG[k]; B += errB[k]; }
+        else if (dither === "bayer") { const t = (BAYER[row & 3][col & 3] / 16 - 0.5) * 40; R += t; G += t; B += t; }
+        R = clamp(R); G = clamp(G); B = clamp(B);
+        const lab = rgbToLab(R, G, B);
+        if (bgLab) {
+          const d = (bgLab[0] - lab[0]) ** 2 + (bgLab[1] - lab[1]) ** 2 + (bgLab[2] - lab[2]) ** 2;
+          if (d < bgTolerance * bgTolerance) { empty++; continue; }
+        }
+        const chosen = nearest(prepared, lab);
+        placements.push(place(col, row, chosen));
+        if (dither === "fs") {
+          const [pr, pg, pb] = hexToRgb(chosen.hex);
+          const er = R - pr, eg = G - pg, eb = B - pb;
+          const add = (kk, f) => { if (kk >= 0 && kk < N) { errR[kk] += er * f; errG[kk] += eg * f; errB[kk] += eb * f; } };
+          if (col + 1 < cols) add(k + 1, 7 / 16);
+          if (row + 1 < rows) { if (col > 0) add(k + cols - 1, 3 / 16); add(k + cols, 5 / 16); if (col + 1 < cols) add(k + cols + 1, 1 / 16); }
+        }
+      }
+    }
+    // outline pass: darkest decoration along strong edges, appended on top of fill
+    if (outline) {
+      const at = (r, c) => cLuma[Math.max(0, Math.min(rows - 1, r)) * cols + Math.max(0, Math.min(cols - 1, c))];
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          if (cA[row * cols + col] < alphaThreshold) continue;
+          const gx = at(row, col + 1) - at(row, col - 1);
+          const gy = at(row + 1, col) - at(row - 1, col);
+          if (Math.hypot(gx, gy) > outlineThreshold) placements.push(place(col, row, ink));
+        }
+      }
+    }
+  }
+  return { placements, cols, rows, step, scanned: N, empty, used: placements.length };
 }
