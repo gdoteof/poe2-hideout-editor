@@ -21,9 +21,11 @@ copyFileSync("web/assets/dickbutt.jpg", "dist/assets/dickbutt.jpg");
 copyFileSync("src/hideout.mjs", "dist/hideout.mjs");
 copyFileSync("src/mosaic.mjs", "dist/mosaic.mjs");
 copyFileSync("src/edit.mjs", "dist/edit.mjs");
+copyFileSync("src/bounds.mjs", "dist/bounds.mjs");
 copyFileSync("data/palette.json", "dist/data/palette.json");
 copyFileSync("data/palette.poe1.json", "dist/data/palette.poe1.json");
 copyFileSync("data/hideout-base-catalog.json", "dist/data/hideout-base-catalog.json");
+copyFileSync("data/base-bounds.json", "dist/data/base-bounds.json");
 
 // preview.mjs imports ../src/hideout.mjs -> ./hideout.mjs in the flat layout
 const preview = readFileSync("web/preview.mjs", "utf8")
@@ -35,9 +37,11 @@ const app = readFileSync("web/app.mjs", "utf8")
   .replace("../src/hideout.mjs", "./hideout.mjs")
   .replace("../src/mosaic.mjs", "./mosaic.mjs")
   .replace("../src/edit.mjs", "./edit.mjs")
+  .replace("../src/bounds.mjs", "./bounds.mjs")
   .replace("../data/palette.json", "./data/palette.json")
   .replace("../data/palette.poe1.json", "./data/palette.poe1.json")
-  .replace("../data/hideout-base-catalog.json", "./data/hideout-base-catalog.json");
+  .replace("../data/hideout-base-catalog.json", "./data/hideout-base-catalog.json")
+  .replace("../data/base-bounds.json", "./data/base-bounds.json");
 writeFileSync("dist/app.mjs", app);
 
 console.log("built dist/");

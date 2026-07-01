@@ -3,6 +3,7 @@ import { mosaicFromImage } from "../src/mosaic.mjs";
 import {
   moveDoodad, rotateDoodad, flipDoodad, deleteDoodad, cloneDoodad, addDoodad, History,
 } from "../src/edit.mjs";
+import { pointInPolygon, boundingBox, boundsCenter, clampToBox } from "../src/bounds.mjs";
 import { showPreview } from "./preview.mjs";
 
 const cv = document.getElementById("cv");
@@ -19,6 +20,7 @@ let palettes = { poe2: [], poe1: [] };
 // per-game palette tweaks: parallel to palettes[game], { enabled, hex }
 const paletteState = { poe2: null, poe1: null };
 let bases = [];
+let boundsMap = {}; // "game:hash" -> { poly, name, ... }
 let srcImage = null; // { data, width, height }
 const view = { scale: 1, cx: 0, cy: 0 };
 
@@ -124,6 +126,16 @@ function draw() {
       ctx.fill();
     }
   }
+  // buildable-area outline
+  if ($("show-bounds").checked) {
+    const poly = boundsFor(currentGame(), model.hideout_hash);
+    if (poly) {
+      ctx.beginPath();
+      poly.forEach((pt, i) => { const [sx, sy] = worldToScreen(pt[0], pt[1]); i ? ctx.lineTo(sx, sy) : ctx.moveTo(sx, sy); });
+      ctx.closePath();
+      ctx.setLineDash([6, 4]); ctx.lineWidth = 1.5; ctx.strokeStyle = "#ffd54a"; ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
   // selection highlight
   if (selected != null && model.doodads[selected]) {
     const d = model.doodads[selected];
@@ -170,6 +182,20 @@ async function loadPalettes() {
   ]);
   palettes.poe2 = p2;
   palettes.poe1 = p1.length ? p1 : p2; // fall back to poe2 palette if poe1 missing
+}
+async function loadBounds() {
+  try {
+    const r = await fetch("../data/base-bounds.json");
+    if (r.ok) boundsMap = (await r.json()).bounds ?? {};
+  } catch { boundsMap = {}; }
+}
+// buildable-area polygon for a base, or null. Imported files may not know their
+// game, so fall back to any base key with a matching hash.
+function boundsFor(game, hash) {
+  if (hash == null) return null;
+  const e = boundsMap[`${game}:${hash}`]
+    || Object.entries(boundsMap).find(([k]) => k.endsWith(`:${hash}`))?.[1];
+  return e?.poly?.length > 2 ? e.poly : null;
 }
 async function loadBases() {
   const res = await fetch("../data/hideout-base-catalog.json");
@@ -311,9 +337,10 @@ function placeAt(wx, wy) {
   const opt = $("add-pick").selectedOptions[0];
   if (!opt) return;
   const at = model.doodads.length;
+  const { x, y } = clampWorld(wx, wy);
   commit(addDoodad(model.doodads, {
     name: opt.dataset.name, hash: +opt.dataset.hash,
-    x: Math.round(wx), y: Math.round(wy), r: 0, fv: 0, hex: opt.dataset.hex,
+    x, y, r: 0, fv: 0, hex: opt.dataset.hex,
   }), at);
 }
 function pickDoodad(sx, sy) {
@@ -334,28 +361,66 @@ function generate() {
   if (!pal.length) { $("m-info").textContent = "Enable at least one palette color"; return; }
   const mode = $("m-mode").value;
   const cols = +$("m-cols").value;
+  const base = currentBase();
+  const poly = boundsFor(currentGame(), base.hideout_hash);
+  const fit = $("m-fit").checked && poly;
+
+  let step, origin;
+  if (fit) {
+    // scale the mosaic to fit inside the base's buildable box and center it,
+    // so nothing overflows into off-limits zones
+    const cellW = srcImage.width / cols;
+    const rows = Math.max(1, Math.round(srcImage.height / cellW));
+    const bb = boundingBox(poly);
+    step = Math.max(1, Math.floor(Math.min((bb.maxX - bb.minX) / cols, (bb.maxY - bb.minY) / rows)));
+    const c = boundsCenter(poly);
+    origin = { x: Math.round(c.x - (cols * step) / 2), y: Math.round(c.y - (rows * step) / 2) };
+    // reflect the computed calibration back into the sliders
+    $("m-step").value = Math.min(6, step); $("m-step-v").textContent = step;
+    $("m-ox").value = origin.x; $("m-ox-v").textContent = origin.x;
+    $("m-oy").value = origin.y; $("m-oy-v").textContent = origin.y;
+  } else {
+    step = +$("m-step").value;
+    origin = { x: +$("m-ox").value, y: +$("m-oy").value };
+  }
+
   const res = mosaicFromImage(srcImage, pal, {
-    mode, cols,
-    step: +$("m-step").value,
-    origin: { x: +$("m-ox").value, y: +$("m-oy").value },
+    mode, cols, step, origin,
     flipY: $("m-flipy").checked,
     inkThreshold: +$("m-ink").value,
     inkCoverage: +$("m-cov").value,
     bgHex: $("m-bg").value,
     bgTolerance: +$("m-bgtol").value,
   });
-  const base = currentBase();
+
+  let placements = res.placements, skipped = 0;
+  if (fit) {
+    const inside = placements.filter((p) => pointInPolygon(p.x, p.y, poly));
+    skipped = placements.length - inside.length;
+    placements = inside;
+  }
   model = {
     version: 1, language: "English",
     hideout_name: base.hideout_name, hideout_hash: base.hideout_hash,
-    doodads: res.placements.map(({ name, hash, x, y, r, fv, hex }) => ({ name, hash, x, y, r, fv, hex })),
+    doodads: placements.map(({ name, hash, x, y, r, fv, hex }) => ({ name, hash, x, y, r, fv, hex })),
     _hadBom: true,
-    _cell: res.step,
+    _cell: step,
   };
   beginHistory();
-  $("m-info").textContent = `${res.used} decorations · ${res.cols}×${res.rows} grid`;
+  const bounds = $("m-fit").checked && !poly ? " · no bounds data for base" : "";
+  const fitNote = fit ? (skipped ? ` · ${skipped} outside bounds skipped` : " · fits in bounds ✓") : "";
+  $("m-info").textContent = `${placements.length} decorations · ${res.cols}×${res.rows} grid${fitNote}${bounds}`;
   fitView();
   refresh();
+}
+function clampWorld(x, y) {
+  if (!$("m-fit").checked) return { x: Math.round(x), y: Math.round(y) };
+  const poly = boundsFor(currentGame(), model?.hideout_hash);
+  return poly ? clampToBox(x, y, boundingBox(poly)) : { x: Math.round(x), y: Math.round(y) };
+}
+function updateFitLock() {
+  const on = $("m-fit").checked;
+  ["m-step", "m-ox", "m-oy"].forEach((id) => { $(id).disabled = on; });
 }
 
 // ---------- events ----------
@@ -412,6 +477,8 @@ for (const [id, vid] of [
 }
 $("m-flipy").addEventListener("change", generate);
 $("m-bg").addEventListener("change", generate);
+$("m-fit").addEventListener("change", () => { updateFitLock(); generate(); });
+$("show-bounds").addEventListener("change", draw);
 $("base-pick").addEventListener("change", () => {
   populateAddPick(); // palette can change with game
   renderPalettePanel(); // per-game palette tweaks
@@ -501,8 +568,8 @@ cv.addEventListener("mousemove", (e) => {
     }
     const [wx, wy] = screenToWorld(e.offsetX, e.offsetY);
     const d = model.doodads[drag.index];
-    d.x = Math.round(wx + drag.grabDX);
-    d.y = Math.round(wy + drag.grabDY);
+    const p = clampWorld(wx + drag.grabDX, wy + drag.grabDY);
+    d.x = p.x; d.y = p.y;
     drag.moved = true;
     return draw();
   }
@@ -521,11 +588,12 @@ window.addEventListener("resize", resize);
 (async function boot() {
   resize();
   loadVersion().then((s) => { $("app-version").textContent = s; });
-  await Promise.all([loadPalettes(), loadBases()]);
+  await Promise.all([loadPalettes(), loadBases(), loadBounds()]);
   populateAddPick();
   renderPalettePanel();
   applyModeVisibility();
   updateCellSizeRow();
+  updateFitLock();
   const img = await loadImageEl("./assets/dickbutt.jpg");
   srcImage = imageDataFrom(img);
   generate();

@@ -27,11 +27,20 @@ image** to try your own, tweak **Mode** / **Resolution**, then **Export
   silently destroys. 26 real PoE1 + PoE2 files round-trip byte-for-byte.
 - **PoE1 & PoE2** from the same engine — no format branching. A **target base**
   picker (`data/hideout-base-catalog.json`) chooses which hideout a mosaic targets.
+- **Per-base buildable bounds** (`data/base-bounds.json`, `src/bounds.mjs`) — with
+  "Fit to base bounds" on, a mosaic auto-scales and centers inside the base's valid
+  area and cells that fall outside are skipped, so decorations aren't rejected on
+  import. The boundary is drawn on the canvas and editing is clamped to it.
+  Authoritative polygons for Canal/Felled/Shrine/Limestone (PoE2); conservative
+  convex hulls (from real layouts) for the rest.
 - **Image → mosaic** engine (`src/mosaic.mjs`):
   - **Ink mode** — traces black-on-white line art (the default demo).
   - **Color mode** — nearest-palette-color per grid cell, with transparent /
     background removal.
-- **Top-down viewer** — pan, zoom, hover for decoration names.
+- **Editing** (`src/edit.mjs`) — select/move/rotate/flip/duplicate/delete/add with
+  undo-redo. **Palette editor** — enable/disable and recolor entries live.
+- **Top-down viewer** — pan, zoom, hover; toggle **Cells/Dots** view with
+  auto/manual cell size. **Preview** the exact export before saving.
 
 ## Test
 
@@ -49,6 +58,7 @@ npm test    # byte-exact round-trip of all samples + mosaic engine checks
 | `data/samples/poe1/`, `poe2/` | Real `.hideout` files used as tests/fixtures |
 | `data/palette.json`  | Mosaic color palette (**provisional** — see below) |
 | `data/hideout-base-catalog.json` | Base `hideout_hash` catalog (drives the picker) |
+| `data/base-bounds.json` | Per-base buildable-area polygons (fit + lock-out) |
 | `data/decoration-catalog.json` | `hash → name` harvested from samples |
 | `docs/hideout-format.md` | Full reverse-engineered format spec |
 | `docs/roadmap.md` | Status and next steps |
@@ -62,8 +72,13 @@ npm test    # byte-exact round-trip of all samples + mosaic engine checks
   each decoration's theme, not yet sampled top-down in-game — so color mosaics
   may not match the preview until those are verified. True white/skin remain the
   weakest (best candidates: Light Mural Tile / Faridun Cloth).
-- **Coordinate calibration.** Mosaic placement uses a single default grid
-  origin/step; the buildable extent differs per base and still needs calibrating
+- **Bounds accuracy varies by base.** Canal/Felled/Shrine/Limestone (PoE2) use
+  exact buildable polygons; every other base uses a convex hull of where real
+  decorations sit — conservative but approximate (it can over-cover concave
+  notches). Celestial (34604) has no bounds data yet.
+- **Coordinate calibration (legacy note).** With "Fit to base bounds" off, mosaic
+  placement uses a single default grid origin/step; the buildable extent differs
+  per base and still needs calibrating
   so exports land nicely in-game.
 - **Mosaic palette is PoE2-only for now.** The base picker and lossless
   load/save work for both games, but the mosaic palette uses PoE2 decoration
